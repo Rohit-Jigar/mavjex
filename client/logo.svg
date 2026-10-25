@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <defs>
+    <linearGradient id="mavjexGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10B981" />
+      <stop offset="50%" stop-color="#06B6D4" />
+      <stop offset="100%" stop-color="#3B82F6" />
+    </linearGradient>
+    <linearGradient id="arrowGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#06B6D4" />
+      <stop offset="100%" stop-color="#10B981" />
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="16" flood-color="#10B981" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <!-- Background Icon Squircle (Optional, translucent dark navy) -->
+  <rect width="512" height="512" rx="112" fill="#0B1120" />
+  <rect width="510" height="510" x="1" y="1" rx="111" stroke="#1E293B" stroke-width="2" fill="none" />
+
+  <!-- Monogram M + J + Upward Arrow -->
+  <g filter="url(#glow)">
+    <!-- Left M Stem -->
+    <path d="M112 368V160C112 151.163 119.163 144 128 144H156C163.5 144 170.2 149.2 172 156.5L232 296L264 220C265.8 215.8 269.8 213 274.4 213H288C296.8 213 304 220.2 304 229V328C304 366 276 392 238 392C204 392 182 372 178 344L214 336C216 350 224 358 238 358C256 358 268 346 268 326V264L212 396C208.5 404 199.5 408 190 404C184 401.5 180 395.5 180 388L148 180H144V368H112Z" fill="url(#mavjexGrad)" />
+    
+    <!-- Right J Stem & Arrow Integration -->
+    <path d="M304 240V330C304 365 278 392 242 392H236C230 392 225 387 225 381C225 375 230 370 236 370H242C266 370 282 352 282 328V200H304Z" fill="url(#mavjexGrad)" opacity="0.3" />
+
+    <!-- Upward Growth Arrow on J -->
+    <path d="M340 120H400V180M398 122L290 230" stroke="url(#arrowGrad)" stroke-width="36" stroke-linecap="round" stroke-linejoin="round" />
+    <polygon points="408,112 328,126 394,192" fill="url(#arrowGrad)" />
+  </g>
+</svg>
