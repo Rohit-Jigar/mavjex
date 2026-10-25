@@ -29,6 +29,19 @@ export interface TradeFill {
   totalUsd: number;
   timestampMs: number;
   realizedPnlUsd?: number;
+  orderType?: "MARKET" | "LIMIT";
+}
+
+export interface LimitOrder {
+  id: string;
+  symbol: string;
+  side: OrderSide;
+  amountUsd: number;
+  limitPrice: number;
+  leverage: number;
+  reservedMarginUsd: number;
+  timestampMs: number;
+  status: "PENDING" | "FILLED" | "CANCELLED";
 }
 
 export class PaperBroker {
@@ -36,14 +49,15 @@ export class PaperBroker {
   private readonly initialCashUsd: number;
   private readonly positions = new Map<string, Position>();
   private readonly fills: TradeFill[] = [];
+  private readonly limitOrders = new Map<string, LimitOrder>();
   private readonly feeRatePct: number;
-  private readonly slippageBps: number; // e.g. 5 bps = 0.05%
+  private readonly slippageBps: number;
   private readonly deskEngine: DeskRiskEngine;
 
   constructor(
-    initialCashUsd = 100_000_000, // $100M USD Virtual Seed Default
+    initialCashUsd = 100_000_000,
     deskEngine: DeskRiskEngine,
-    feeRatePct = 0.05, // 0.05% taker fee
+    feeRatePct = 0.05,
     slippageBps = 3
   ) {
     this.cashUsd = initialCashUsd;
@@ -69,10 +83,19 @@ export class PaperBroker {
     return [...this.fills];
   }
 
+  getLimitOrders(): readonly LimitOrder[] {
+    return Array.from(this.limitOrders.values());
+  }
+
+  getPendingLimitOrders(): readonly LimitOrder[] {
+    return Array.from(this.limitOrders.values()).filter((o) => o.status === "PENDING");
+  }
+
   resetBalance(amountUsd = 100_000_000): void {
     this.cashUsd = amountUsd;
     this.positions.clear();
     this.fills.length = 0;
+    this.limitOrders.clear();
     this.deskEngine.resetDailyCounters();
   }
 
@@ -82,11 +105,9 @@ export class PaperBroker {
       return side === "BUY" ? 0 : entryPrice * 2;
     }
     if (side === "BUY") {
-      // Long liquidation: Price falls by (1/leverage - mmr)
       const liqPrice = entryPrice * (1 - (1 / leverage - mmr));
       return Math.max(0, liqPrice);
     } else {
-      // Short liquidation: Price rises by (1/leverage - mmr)
       const liqPrice = entryPrice * (1 + (1 / leverage - mmr));
       return liqPrice;
     }
@@ -115,6 +136,13 @@ export class PaperBroker {
       unrealizedPnlUsd += posUnrealized;
     }
 
+    // Pending limit order reserved margin
+    for (const lo of this.limitOrders.values()) {
+      if (lo.status === "PENDING") {
+        marginUsedUsd += lo.reservedMarginUsd;
+      }
+    }
+
     const totalEquityUsd = this.cashUsd + marginUsedUsd + unrealizedPnlUsd;
     const totalRealizedPnlUsd = totalEquityUsd - this.initialCashUsd - unrealizedPnlUsd;
 
@@ -129,9 +157,9 @@ export class PaperBroker {
   }
 
   /**
-   * Executes an order in paper mode with leverage, margin reservations, slippage, and fee deductions.
+   * Executes a market order in paper mode with leverage, margin reservations, slippage, and fee deductions.
    */
-  executeOrder(order: BaseOrderRequest & { leverage?: number }): TradeFill {
+  executeOrder(order: BaseOrderRequest & { leverage?: number; orderType?: "MARKET" | "LIMIT" }): TradeFill {
     const leverage = Math.max(1, Math.min(100, order.leverage || 1));
     const notionalUsd = order.requestedAmountUsd;
     const requiredMarginUsd = notionalUsd / leverage;
@@ -156,7 +184,7 @@ export class PaperBroker {
           : (-priceDelta / existing.averageEntryPrice) * existing.notionalUsd;
 
       const returnedCash = existing.marginUsd + realizedPnlUsd - feeUsd;
-      this.cashUsd += returnedCash;
+      this.cashUsd += Math.max(0, returnedCash);
       this.deskEngine.updatePnl(realizedPnlUsd);
       this.positions.delete(order.symbol);
 
@@ -175,7 +203,8 @@ export class PaperBroker {
         feeUsd,
         totalUsd: existing.notionalUsd,
         timestampMs: Date.now(),
-        realizedPnlUsd
+        realizedPnlUsd,
+        orderType: order.orderType || "MARKET"
       };
       this.fills.push(closeFill);
       return closeFill;
@@ -195,7 +224,6 @@ export class PaperBroker {
     const liquidationPrice = PaperBroker.calculateLiquidationPrice(fillPrice, order.side, leverage);
 
     if (existing && existing.side === order.side) {
-      // Add to existing same-side position
       const newNotional = existing.notionalUsd + notionalUsd;
       const newMargin = existing.marginUsd + requiredMarginUsd;
       const newQty = existing.quantity + quantity;
@@ -233,7 +261,8 @@ export class PaperBroker {
       slippagePct,
       feeUsd,
       totalUsd: notionalUsd,
-      timestampMs: Date.now()
+      timestampMs: Date.now(),
+      orderType: order.orderType || "MARKET"
     };
 
     this.fills.push(fill);
@@ -241,7 +270,105 @@ export class PaperBroker {
   }
 
   /**
-   * Closes an active position at current market price.
+   * Places a limit order with reserved margin.
+   */
+  placeLimitOrder(req: {
+    id: string;
+    symbol: string;
+    side: OrderSide;
+    amountUsd: number;
+    limitPrice: number;
+    leverage?: number;
+  }): LimitOrder {
+    const leverage = Math.max(1, Math.min(100, req.leverage || 1));
+    const requiredMargin = req.amountUsd / leverage;
+
+    if (requiredMargin > this.cashUsd) {
+      throw new Error(`Insufficient cash for limit order margin: required $${requiredMargin.toFixed(2)}, available $${this.cashUsd.toFixed(2)}`);
+    }
+
+    this.cashUsd -= requiredMargin;
+
+    const lo: LimitOrder = {
+      id: req.id,
+      symbol: req.symbol,
+      side: req.side,
+      amountUsd: req.amountUsd,
+      limitPrice: req.limitPrice,
+      leverage,
+      reservedMarginUsd: requiredMargin,
+      timestampMs: Date.now(),
+      status: "PENDING"
+    };
+
+    this.limitOrders.set(lo.id, lo);
+    return lo;
+  }
+
+  /**
+   * Cancels a pending limit order and refunds the reserved margin.
+   */
+  cancelLimitOrder(orderId: string): LimitOrder {
+    const lo = this.limitOrders.get(orderId);
+    if (!lo) {
+      throw new Error(`Limit order not found: ${orderId}`);
+    }
+    if (lo.status !== "PENDING") {
+      throw new Error(`Cannot cancel limit order: status is already ${lo.status}`);
+    }
+
+    lo.status = "CANCELLED";
+    this.cashUsd += lo.reservedMarginUsd;
+    return lo;
+  }
+
+  /**
+   * Evaluates pending limit orders against current market prices and executes triggered orders.
+   */
+  checkAndFillLimitOrders(currentPrices: Map<string, number>): TradeFill[] {
+    const executedFills: TradeFill[] = [];
+
+    for (const lo of this.limitOrders.values()) {
+      if (lo.status !== "PENDING") continue;
+      const currPrice = currentPrices.get(lo.symbol);
+      if (!currPrice) continue;
+
+      const shouldFill =
+        (lo.side === "BUY" && currPrice <= lo.limitPrice) ||
+        (lo.side === "SELL" && currPrice >= lo.limitPrice);
+
+      if (shouldFill) {
+        lo.status = "FILLED";
+        // Refund reserved margin so executeOrder can apply formal deduction
+        this.cashUsd += lo.reservedMarginUsd;
+
+        const fill = this.executeOrder({
+          id: lo.id,
+          botType: "LIMIT_TRIGGER",
+          side: lo.side,
+          symbol: lo.symbol,
+          requestedAmountUsd: lo.amountUsd,
+          quotePrice: lo.limitPrice,
+          requestTimestampMs: Date.now(),
+          leverage: lo.leverage,
+          orderType: "LIMIT",
+          feed: {
+            symbol: lo.symbol,
+            currentPrice: currPrice,
+            poolLiquidityUsd: 25_000_000,
+            lastFeedTimestampMs: Date.now()
+          }
+        });
+
+        executedFills.push(fill);
+      }
+    }
+
+    return executedFills;
+  }
+
+  /**
+   * Closes an active position at market price.
    */
   closePosition(symbol: string, currentPrice: number): TradeFill {
     const pos = this.positions.get(symbol);
@@ -277,10 +404,58 @@ export class PaperBroker {
       feeUsd: 0,
       totalUsd: pos.notionalUsd,
       timestampMs: Date.now(),
-      realizedPnlUsd
+      realizedPnlUsd,
+      orderType: "MARKET"
     };
 
     this.fills.push(fill);
     return fill;
+  }
+
+  /**
+   * Exports full broker state for session persistence.
+   */
+  exportState(): {
+    cashUsd: number;
+    positions: Position[];
+    limitOrders: LimitOrder[];
+    fills: TradeFill[];
+  } {
+    return {
+      cashUsd: this.cashUsd,
+      positions: Array.from(this.positions.values()),
+      limitOrders: Array.from(this.limitOrders.values()),
+      fills: [...this.fills]
+    };
+  }
+
+  /**
+   * Imports previously persisted broker state.
+   */
+  importState(state: {
+    cashUsd: number;
+    positions?: Position[];
+    limitOrders?: LimitOrder[];
+    fills?: TradeFill[];
+  }): void {
+    if (typeof state.cashUsd === "number") {
+      this.cashUsd = state.cashUsd;
+    }
+    this.positions.clear();
+    if (Array.isArray(state.positions)) {
+      for (const p of state.positions) {
+        this.positions.set(p.symbol, p);
+      }
+    }
+    this.limitOrders.clear();
+    if (Array.isArray(state.limitOrders)) {
+      for (const lo of state.limitOrders) {
+        this.limitOrders.set(lo.id, lo);
+      }
+    }
+    this.fills.length = 0;
+    if (Array.isArray(state.fills)) {
+      this.fills.push(...state.fills);
+    }
   }
 }

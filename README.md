@@ -10,9 +10,9 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-10B981.svg)](LICENSE)
 [![Node.js Version](https://img.shields.io/badge/Node.js-22%2B-3B82F6.svg?logo=node.js)](https://nodejs.org/)
 
-**A beginner-friendly, production-grade dual trading platform featuring $100,000,000 USD virtual seed capital for risk-free learning, 1x to 100x leverage, dynamic liquidation calculations, Level-2 market depth, desk-level circuit breakers, and live Alpaca execution.**
+**A beginner-friendly, production-grade dual trading platform featuring $100,000,000 USD virtual seed capital for risk-free learning, 1x to 100x leverage, global stock search across NSE & BSE, Market & Limit orders, dynamic liquidation calculations, Level-2 market depth, desk-level circuit breakers, and live Alpaca execution.**
 
-[🌐 Live Terminal (GitHub Pages)](https://rohit-jigar.github.io/mavjex/) • [⚡ Render API Backend](https://mavjex.onrender.com)
+[🌐 Live Terminal (GitHub Pages)](https://rohit-jigar.github.io/mavjex/) • [⚡ Render API Backend](https://mavjex.onrender.com) • [📋 Codebase Audit](CODEBASE_AUDIT.md) • [📊 Market Data Coverage](MARKET_DATA_COVERAGE.md)
 
 </div>
 
@@ -107,13 +107,28 @@ Before placing any order, the real-time ticket dynamically displays:
 ### 📊 4. Level-2 Order Book / Market Depth Ladder
 Inspired by Binance and Zerodha Kite, learners can see real-time buyer and seller bid/ask queues with proportional visual depth bars and live spread metrics.
 
-### 📑 5. Active Positions Table & 1-Click Close
+### 🔍 5. Global Stock Explorer & Comprehensive NSE / BSE Coverage
+Search comprehensive instruments across:
+* **NSE (National Stock Exchange of India)**: Large, Mid, and Small-cap equities (e.g. `RELIANCE.NS`, `TCS.NS`, `HDFCBANK.NS`, `INFY.NS`, `SBIN.NS`, `BHARTIARTL.NS`, `TATAMOTORS.NS`, `SUZLON.NS`, `NIFTYBEES.NS`).
+* **BSE (Bombay Stock Exchange)**: Script codes and company scrips (`500325.BO`, `532540.BO`, `500180.BO`, `500209.BO`).
+* **US Markets (NASDAQ & NYSE)**: `AAPL`, `MSFT`, `NVDA`, `TSLA`, `AMZN`, `GOOGL`, `SPY`, `QQQ`.
+* **Crypto (Binance Feed)**: `SOLUSDT`, `BTCUSDT`, `ETHUSDT` (24/7 continuous trading).
+* **Fuzzy Relevance Search**: Instant lookup by company name (Reliance, Tata, Infosys, Apple), symbol, exchange, or ISIN code with filter chips (`All`, `NSE`, `BSE`, `NASDAQ`, `NYSE`, `Crypto`).
+* **Regulatory Freshness Tags**: Explicitly labels quotes as `LIVE`, `DELAYED_15M`, `MARKET_CLOSED`, or `LAST_KNOWN`.
+
+### ⏳ 6. Market & Limit Orders
+Learners can place both **Market Orders** for immediate execution and **Limit Orders** with margin collateral escrow reservation and automated trigger fills when market prices reach the target price.
+
+### 🕯️ 7. Interactive Candlestick & Line Charts with Time-Ranges
+Switch between high-performance 60fps Candlestick and Line chart views across **1D**, **1W**, **1M**, **1Y**, and **ALL** time horizons with real-time OHLCV HUD metrics.
+
+### 📑 8. Active Positions Table & 1-Click Close
 View open leveraged trades with live Mark Price, Liquidation Price, Margin, and floating Unrealized P&L ($ and %). Close any position instantly in 1 click to lock in profits or cap losses.
 
-### 🔄 6. 1-Click Reset to $100M
+### 🔄 9. 1-Click Reset to $100M
 Learners can reset their virtual balance back to $100,000,000 USD anytime with a single click to experiment with fresh strategies.
 
-### 📖 7. Built-in Beginner Academy & Contextual Tooltips
+### 📖 10. Built-in Beginner Academy & Contextual Tooltips
 Interactive tooltips (`ⓘ`) explain Leverage, Margin, Liquidation, Stop Loss, Long vs Short, and Desk Risk Breakers in plain English.
 
 ---
@@ -162,7 +177,7 @@ npx serve mavjex/client
 
 ## 🧪 Automated Test Suite
 
-Run the 19 automated tests validating the desk risk engine, bot rules, and leverage mechanics:
+Run the 25 automated tests validating the instrument catalog, market data normalization, limit order engine, desk risk engine, bot rules, and leverage mechanics:
 
 ```bash
 node --experimental-strip-types --test "trading-desk-risk/test/*.test.ts"
@@ -179,6 +194,12 @@ Output:
 ✔ House Hard Rule 1: Never hold or sell own supply (Fees only, zero rug risk)
 ✔ House Hard Rule 2: Break-even gate requires fee revenue >= 2x launch costs
 ✔ House Hard Rule 3: Daily launch budget hard stop halts further launches
+✔ InstrumentCatalog: indexes full instrument universe
+✔ InstrumentCatalog: searches by company name and partial name
+✔ InstrumentCatalog: searches by ticker, ISIN, and exchange
+✔ InstrumentCatalog: distinguishes exchange-specific symbols for same company on NSE vs BSE
+✔ PaperBroker: places, cancels, and triggers Limit Orders
+✔ PaperBroker: exports and imports persistent portfolio state
 ✔ PaperBroker: initializes with $100,000,000 virtual seed capital default
 ✔ PaperBroker: calculates liquidation price correctly across leverage tiers (1x to 100x)
 ✔ PaperBroker: executes leveraged order requiring only fractional margin from $100M cash
@@ -189,8 +210,8 @@ Output:
 ✔ Spy Hard Rule: mirror exits immediately and block buys into leader exit
 ✔ Spy Hard Rule: demote wallet after three losing copies in a row
 ✔ Spy Hard Rule: cap allocation per wallet
-ℹ tests 19
-ℹ pass 19
+ℹ tests 25
+ℹ pass 25
 ℹ fail 0
 ```
 

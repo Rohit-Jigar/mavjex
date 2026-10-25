@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>MavJex — Simple, High-Performance Trading</title>
-  <meta name="description" content="MavJex is the simplest beginner-friendly trading platform with $100M virtual demo cash, 1x-100x leverage, active positions, strategy bots, and live circuit breakers.">
+  <title>MavJex — Global Paper Trading & Market Explorer</title>
+  <meta name="description" content="MavJex is a beginner-friendly global paper-trading terminal with $100M virtual demo cash, full NSE & BSE Indian stock coverage, US equities, 1x-100x leverage, strategy bots, and circuit breakers.">
   <meta name="theme-color" content="#0B1120">
 
   <!-- OpenGraph -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://rohit-jigar.github.io/mavjex/">
   <meta property="og:title" content="MavJex — Simulate. Analyze. Evolve.">
-  <meta property="og:description" content="Super simple trading terminal with $100M demo capital, 1x-100x leverage, strategy bots, and risk circuit breakers.">
+  <meta property="og:description" content="Global Paper Trading Terminal with $100M virtual capital, comprehensive NSE/BSE Indian stock search, 1x-100x leverage, and risk circuit breakers.">
   <meta property="og:image" content="./og-image.png">
 
   <!-- Favicon -->
@@ -42,6 +42,9 @@
       <nav class="main-tabs" role="tablist">
         <button class="nav-tab active" data-view="view-trade">
           <span class="tab-icon">📈</span> Trade
+        </button>
+        <button class="nav-tab" data-view="view-explorer">
+          <span class="tab-icon">🔍</span> Market Explorer <span class="tab-badge-new">NSE / BSE</span>
         </button>
         <button class="nav-tab" data-view="view-positions">
           <span class="tab-icon">📊</span> Positions <span class="tab-count-badge" id="positionsTabBadge">0</span>
@@ -110,41 +113,69 @@
         <div class="trade-chart-card">
           <!-- Quick Asset Selector Pills -->
           <div class="asset-selector-row">
-            <button class="asset-pill active" data-sym="SOLUSDT">
-              <span class="pill-sym">SOL</span>
-              <span class="pill-price font-mono" id="pillPrice-SOLUSDT">$101.41</span>
+            <button class="asset-pill active" data-sym="RELIANCE">
+              <span class="pill-sym">RELIANCE</span>
+              <span class="pill-exch">NSE 🇮🇳</span>
+              <span class="pill-price font-mono" id="pillPrice-RELIANCE">₹2,845.50</span>
             </button>
-            <button class="asset-pill" data-sym="BTCUSDT">
-              <span class="pill-sym">BTC</span>
-              <span class="pill-price font-mono" id="pillPrice-BTCUSDT">$80,600</span>
+            <button class="asset-pill" data-sym="TCS">
+              <span class="pill-sym">TCS</span>
+              <span class="pill-exch">NSE 🇮🇳</span>
+              <span class="pill-price font-mono" id="pillPrice-TCS">₹4,120.25</span>
             </button>
-            <button class="asset-pill" data-sym="ETHUSDT">
-              <span class="pill-sym">ETH</span>
-              <span class="pill-price font-mono" id="pillPrice-ETHUSDT">$2,343</span>
+            <button class="asset-pill" data-sym="INFY">
+              <span class="pill-sym">INFY</span>
+              <span class="pill-exch">NSE 🇮🇳</span>
+              <span class="pill-price font-mono" id="pillPrice-INFY">₹1,892.40</span>
             </button>
             <button class="asset-pill" data-sym="AAPL">
               <span class="pill-sym">AAPL</span>
-              <span class="pill-price font-mono" id="pillPrice-AAPL">$347.73</span>
+              <span class="pill-exch">NASDAQ 🇺🇸</span>
+              <span class="pill-price font-mono" id="pillPrice-AAPL">$232.50</span>
             </button>
             <button class="asset-pill" data-sym="NVDA">
               <span class="pill-sym">NVDA</span>
-              <span class="pill-price font-mono" id="pillPrice-NVDA">$210.96</span>
+              <span class="pill-exch">NASDAQ 🇺🇸</span>
+              <span class="pill-price font-mono" id="pillPrice-NVDA">$141.20</span>
             </button>
-            <button class="asset-pill" data-sym="TSLA">
-              <span class="pill-sym">TSLA</span>
-              <span class="pill-price font-mono" id="pillPrice-TSLA">$218.40</span>
+            <button class="asset-pill" data-sym="SOLUSDT">
+              <span class="pill-sym">SOL</span>
+              <span class="pill-exch">CRYPTO ⚡</span>
+              <span class="pill-price font-mono" id="pillPrice-SOLUSDT">$101.41</span>
+            </button>
+            <button class="asset-pill btn-more-explorer" id="btnExploreMore">
+              <span class="pill-sym">🔍 EXPLORE</span>
+              <span class="pill-exch">All NSE / BSE / US</span>
             </button>
           </div>
 
           <!-- Active Price Banner -->
           <div class="chart-top-bar">
             <div>
-              <h1 class="active-sym-title font-mono" id="chartSymbolName">SOL/USDT</h1>
-              <span class="asset-type-badge" id="chartAssetType">Crypto • 24/7 Market</span>
+              <div class="symbol-with-badge">
+                <h1 class="active-sym-title font-mono" id="chartSymbolName">RELIANCE (NSE)</h1>
+                <span class="freshness-badge delayed" id="chartDataFreshness">DELAYED (15M)</span>
+              </div>
+              <span class="asset-type-badge" id="chartAssetType">Reliance Industries Ltd. • National Stock Exchange of India</span>
             </div>
             <div class="active-price-box">
-              <div class="active-big-price font-mono" id="chartPriceBig">$101.4100</div>
-              <div class="active-price-change font-mono positive" id="chartPriceChangeBig">+3.42% (Today)</div>
+              <div class="active-big-price font-mono" id="chartPriceBig">₹2,845.50</div>
+              <div class="active-price-change font-mono positive" id="chartPriceChangeBig">+1.42% (Today)</div>
+            </div>
+          </div>
+
+          <!-- Chart Controls Bar (Candles/Line + Time-Ranges) -->
+          <div class="chart-controls-bar">
+            <div class="chart-type-toggle">
+              <button class="chart-ctrl-btn active" data-chart="candles" id="btnChartCandles">🕯️ Candles</button>
+              <button class="chart-ctrl-btn" data-chart="line" id="btnChartLine">📈 Line</button>
+            </div>
+            <div class="chart-ranges" id="chartRangesGroup">
+              <button class="range-btn active" data-range="1D">1D</button>
+              <button class="range-btn" data-range="1W">1W</button>
+              <button class="range-btn" data-range="1M">1M</button>
+              <button class="range-btn" data-range="1Y">1Y</button>
+              <button class="range-btn" data-range="ALL">ALL</button>
             </div>
           </div>
 
@@ -164,16 +195,34 @@
             <span class="mode-tag" id="ticketModeTag">Paper $100M</span>
           </div>
 
-          <!-- 1. BUY / SELL Buttons -->
+          <!-- 1. Order Type Switcher (Market vs Limit) -->
+          <div class="order-type-switch">
+            <button class="ot-btn active" id="btnOtMarket">Market Order</button>
+            <button class="ot-btn" id="btnOtLimit">Limit Order</button>
+          </div>
+
+          <!-- 2. BUY / SELL Buttons -->
           <div class="buy-sell-toggle">
             <button class="toggle-btn buy active" id="btnSideBuy">BUY (LONG)</button>
             <button class="toggle-btn sell" id="btnSideSell">SELL (SHORT)</button>
           </div>
 
-          <!-- 2. Quick Amount Selector -->
+          <!-- Limit Price Input (Shown only when Limit selected) -->
+          <div class="ticket-group" id="groupLimitPrice" style="display: none;">
+            <label class="ticket-label">
+              <span>Limit Trigger Price</span>
+              <span class="label-helper font-mono" id="labelCurrentQuote">Current: ₹2,845.50</span>
+            </label>
+            <div class="amount-input-box">
+              <span class="dollar-sign" id="limitCurrencySign">₹</span>
+              <input type="number" id="inputLimitPrice" class="trade-input font-mono" value="2800" step="0.5">
+            </div>
+          </div>
+
+          <!-- 3. Quick Amount Selector -->
           <div class="ticket-group">
             <label class="ticket-label">
-              <span>Trade Amount (USD)</span>
+              <span>Trade Size (Total Notional)</span>
               <span class="label-helper font-mono" id="labelMaxCap">Max $2,000,000</span>
             </label>
             <div class="quick-amounts">
@@ -189,7 +238,7 @@
             </div>
           </div>
 
-          <!-- 3. Leverage Selector -->
+          <!-- 4. Leverage Selector -->
           <div class="ticket-group">
             <div class="ticket-label">
               <span>Leverage Multiplier</span>
@@ -205,7 +254,7 @@
             </div>
           </div>
 
-          <!-- 4. Plain-English Summary Box (Zero Confusion) -->
+          <!-- 5. Plain-English Summary Box (Zero Confusion) -->
           <div class="simple-calc-summary">
             <div class="summary-line">
               <span>Your Cash Collateral (Margin):</span>
@@ -217,23 +266,79 @@
             </div>
             <div class="summary-line">
               <span>Liquidation Price (Loss Stop):</span>
-              <strong class="font-mono text-crimson" id="dispCalcLiq">$91.78</strong>
+              <strong class="font-mono text-crimson" id="dispCalcLiq">₹2,575.18</strong>
             </div>
             <p class="summary-explainer" id="dispCalcExplainer">
-              💡 If the price drops <strong>9.5%</strong> to $91.78, this trade closes to prevent debt.
+              💡 If the price drops <strong>9.5%</strong>, this trade closes to prevent debt.
             </p>
           </div>
 
-          <!-- 5. Big Action Button -->
+          <!-- 6. Big Action Button -->
           <button class="btn-execute buy" id="btnExecuteTrade">
-            BUY $10,000 OF SOL (10x)
+            BUY $10,000 OF RELIANCE (10x)
           </button>
         </div>
       </div>
     </div>
 
     <!-- ================================================================= -->
-    <!-- VIEW 2: MY POSITIONS (Dedicated, Unmissable & Functional)         -->
+    <!-- VIEW 2: MARKET EXPLORER & GLOBAL SEARCH (NSE, BSE, US, Crypto)    -->
+    <!-- ================================================================= -->
+    <div class="view-panel" id="view-explorer">
+      <div class="panel-header-row">
+        <div>
+          <h2>Global Stock & Instrument Explorer</h2>
+          <p class="text-muted">Search comprehensive stocks listed on <strong>NSE</strong> (National Stock Exchange of India), <strong>BSE</strong>, US markets (NASDAQ/NYSE), and Crypto.</p>
+        </div>
+      </div>
+
+      <!-- Search Field Card -->
+      <div class="explorer-search-card">
+        <div class="search-input-wrapper">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="marketSearchInput" class="search-field" placeholder="Search by company name (Reliance, Tata, Infosys, Apple), symbol (RELIANCE, TCS, AAPL), exchange, or ISIN...">
+          <button class="search-clear-btn" id="btnSearchClear" style="display: none;">✕</button>
+        </div>
+
+        <!-- Filter Chips Bar -->
+        <div class="explorer-filters-bar">
+          <div class="filter-group">
+            <span class="filter-label">Exchange:</span>
+            <button class="filter-chip active" data-filter="exchange" data-val="ALL">All Markets</button>
+            <button class="filter-chip" data-filter="exchange" data-val="NSE">🇮🇳 NSE (India)</button>
+            <button class="filter-chip" data-filter="exchange" data-val="BSE">🇮🇳 BSE (India)</button>
+            <button class="filter-chip" data-filter="exchange" data-val="NASDAQ">🇺🇸 NASDAQ</button>
+            <button class="filter-chip" data-filter="exchange" data-val="NYSE">🇺🇸 NYSE</button>
+            <button class="filter-chip" data-filter="exchange" data-val="BINANCE">⚡ Crypto</button>
+          </div>
+
+          <div class="filter-group">
+            <span class="filter-label">Type:</span>
+            <button class="filter-chip active" data-filter="type" data-val="ALL">All Types</button>
+            <button class="filter-chip" data-filter="type" data-val="EQUITY">Equities</button>
+            <button class="filter-chip" data-filter="type" data-val="ETF">ETFs</button>
+            <button class="filter-chip" data-filter="type" data-val="CRYPTO">Crypto</button>
+          </div>
+        </div>
+
+        <!-- Data Notice Banner -->
+        <div class="explorer-notice-bar">
+          <span>ℹ️ <strong>Market Data Notice:</strong> Indian equities (NSE & BSE) display 15-minute delayed or last available exchange prices. US stocks and Crypto provide live updates. Simulated orders are executed against verified exchange quotes.</span>
+        </div>
+      </div>
+
+      <!-- Results Grid -->
+      <div class="explorer-results-header">
+        <span class="results-count" id="dispResultsCount">Showing 30 instruments</span>
+      </div>
+
+      <div class="explorer-cards-grid" id="explorerResultsGrid">
+        <!-- Rendered dynamically by app.js -->
+      </div>
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- VIEW 3: MY POSITIONS (Dedicated, Unmissable & Functional)         -->
     <!-- ================================================================= -->
     <div class="view-panel" id="view-positions">
       <div class="panel-header-row">
@@ -246,19 +351,11 @@
 
       <div class="positions-container" id="positionsContainer">
         <!-- Rendered dynamically -->
-        <div class="empty-view-box">
-          <div class="empty-icon">📊</div>
-          <h3>No Open Positions Yet</h3>
-          <p>You haven't opened any trades. Switch to the <strong>Trade</strong> tab to open your first $100M demo position!</p>
-          <button class="btn-primary-action" onclick="document.querySelector('[data-view=view-trade]').click()">
-            Open a Trade Now
-          </button>
-        </div>
       </div>
     </div>
 
     <!-- ================================================================= -->
-    <!-- VIEW 3: MARKET DEPTH (Simple Level-2 Order Book)                  -->
+    <!-- VIEW 4: MARKET DEPTH (Simple Level-2 Order Book)                  -->
     <!-- ================================================================= -->
     <div class="view-panel" id="view-depth">
       <div class="panel-header-row">
@@ -266,16 +363,16 @@
           <h2>Market Depth (Level-2 Order Book)</h2>
           <p class="text-muted">Live queue of buyers (Green Bids) and sellers (Red Asks) waiting in the market.</p>
         </div>
-        <div class="depth-sym-indicator font-mono" id="depthActiveSym">SOL/USDT</div>
+        <div class="depth-sym-indicator font-mono" id="depthActiveSym">RELIANCE (NSE)</div>
       </div>
 
       <div class="depth-card">
         <div class="depth-spread-header">
           <div class="spread-box">
             <span class="text-muted">Current Spread:</span>
-            <span class="font-mono text-amber" id="depthSpreadAmount">$0.0400 (0.04%)</span>
+            <span class="font-mono text-amber" id="depthSpreadAmount">₹0.50 (0.02%)</span>
           </div>
-          <div class="depth-center-price font-mono" id="depthCenterPrice">$101.4100</div>
+          <div class="depth-center-price font-mono" id="depthCenterPrice">₹2,845.50</div>
         </div>
 
         <div class="depth-ladder-grid">
@@ -299,7 +396,7 @@
     </div>
 
     <!-- ================================================================= -->
-    <!-- VIEW 4: STRATEGY BOTS (Fully Interactive, Working 1-Click Tests)  -->
+    <!-- VIEW 5: STRATEGY BOTS (Fully Interactive, Working 1-Click Tests)  -->
     <!-- ================================================================= -->
     <div class="view-panel" id="view-bots">
       <div class="panel-header-row">
@@ -402,7 +499,7 @@
     </div>
 
     <!-- ================================================================= -->
-    <!-- VIEW 5: RISK BREAKERS (Hedge-Fund Circuit Breakers With Test Trip) -->
+    <!-- VIEW 6: RISK BREAKERS (Hedge-Fund Circuit Breakers With Test Trip) -->
     <!-- ================================================================= -->
     <div class="view-panel" id="view-breakers">
       <div class="panel-header-row">
@@ -444,7 +541,7 @@
           </div>
           <div class="bc-val font-mono" id="valConsecLoss">0 / 3 Strikes</div>
           <div class="bc-progress-bar"><div class="bc-progress-fill" id="fillConsecLoss" style="width: 0%;"></div></div>
-          <p class="bc-desc">Haults trading after 3 consecutive losses to stop emotional revenge trading.</p>
+          <p class="bc-desc">Halts trading after 3 consecutive losses to stop emotional revenge trading.</p>
         </div>
 
         <div class="breaker-card" id="cardLiquidity">
