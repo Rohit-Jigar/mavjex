@@ -12,7 +12,7 @@
 
 **A beginner-friendly, production-grade dual trading platform featuring $100,000,000 USD virtual seed capital for risk-free learning, 1x to 100x leverage, dynamic liquidation calculations, Level-2 market depth, desk-level circuit breakers, and live Alpaca execution.**
 
-[🌐 Live Terminal (GitHub Pages)](https://rohit-jigar.github.io/mavjex/) • [⚡ Render API Backend](https://mavjex-api.onrender.com)
+[🌐 Live Terminal (GitHub Pages)](https://rohit-jigar.github.io/mavjex/) • [⚡ Render API Backend](https://mavjex.onrender.com)
 
 </div>
 
