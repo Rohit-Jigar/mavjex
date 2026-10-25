@@ -1,0 +1,9 @@
+{
+  "name": "trading-desk-risk",
+  "version": "1.0.0",
+  "description": "Desk-Level Circuit Breakers & Bot Hard-Rules Execution Gate (Gambler, House, Spy)",
+  "type": "module",
+  "scripts": {
+    "test": "node --experimental-strip-types --test test/*.test.ts"
+  }
+}

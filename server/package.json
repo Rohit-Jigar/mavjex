@@ -1,0 +1,15 @@
+{
+  "name": "mavjex-server",
+  "version": "1.0.0",
+  "description": "MavJex Paper-Trading & Risk Execution Gateway API",
+  "type": "module",
+  "scripts": {
+    "start": "node --experimental-strip-types src/index.ts",
+    "dev": "node --experimental-strip-types --watch src/index.ts",
+    "test": "node --experimental-strip-types --test test/*.test.ts"
+  },
+  "dependencies": {},
+  "engines": {
+    "node": ">=22.0.0"
+  }
+}

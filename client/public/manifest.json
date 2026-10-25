@@ -1,0 +1,16 @@
+{
+  "name": "MavJex — Simulate. Analyze. Evolve.",
+  "short_name": "MavJex",
+  "description": "Premium Paper Trading Terminal with Desk-Level Circuit Breakers & Bot Execution Gates.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#0B1120",
+  "theme_color": "#0B1120",
+  "icons": [
+    {
+      "src": "./favicon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: mavjex-api
+    runtime: node
+    plan: free
+    region: oregon
+    buildCommand: "echo 'No build step required for native MavJex runtime'"
+    startCommand: "node --experimental-strip-types server/src/index.ts"
+    envVars:
+      - key: NODE_VERSION
+        value: 22.12.0
+      - key: PORT
+        value: 10000
+      - key: ALPACA_ENDPOINT
+        value: https://paper-api.alpaca.markets
+      - key: ALPACA_API_KEY
+        sync: false
+      - key: ALPACA_SECRET_KEY
+        sync: false

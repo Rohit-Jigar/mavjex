@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>MavJex — Simulate. Analyze. Evolve.</title>
+  <meta name="description" content="MavJex is a high-performance algorithmic paper-trading terminal with desk-level circuit breakers, live market feeds, and bot failure-mode execution gates.">
+  <meta name="keywords" content="trading, paper trading, algorithmic trading, crypto, stocks, risk management, circuit breakers, fintech">
+  <meta name="author" content="MavJex">
+  <meta name="theme-color" content="#0B1120">
+
+  <!-- OpenGraph / Social Sharing Meta Tags (WhatsApp, Telegram, Twitter, LinkedIn, Discord) -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://rohit-jigar.github.io/mavjex/">
+  <meta property="og:title" content="MavJex — Simulate. Analyze. Evolve.">
+  <meta property="og:description" content="Next-Gen Algorithmic Paper-Trading Terminal with Real-Time Market Ticks, Desk-Level Circuit Breakers, and Strict Order-Path Risk Gates.">
+  <meta property="og:image" content="./og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="MavJex">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="MavJex — Simulate. Analyze. Evolve.">
+  <meta name="twitter:description" content="Next-Gen Algorithmic Paper-Trading Terminal with Real-Time Market Ticks and Desk-Level Circuit Breakers.">
+  <meta name="twitter:image" content="./og-image.png">
+
+  <!-- Favicon & PWA -->
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg">
+  <link rel="apple-touch-icon" href="./logo.svg">
+  <link rel="manifest" href="./manifest.json">
+
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="brand">
+          <img src="./logo.svg" alt="MavJex Monogram Logo" class="brand-logo">
+          <div class="brand-text">
+            <span class="brand-name">Mav<span class="gradient-text">Jex</span></span>
+            <span class="brand-tagline">SIMULATE • ANALYZE • EVOLVE</span>
+          </div>
+        </div>
+        <button class="mobile-close-btn" id="sidebarCloseBtn" aria-label="Close Sidebar">✕</button>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="#dashboard" class="nav-item active">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+          <span>Terminal</span>
+        </a>
+        <a href="#watchlist" class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+          <span>Watchlist</span>
+          <span class="badge live-badge">Live</span>
+        </a>
+        <a href="#bots" class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8" y2="16"/><line x1="16" y1="16" x2="16" y2="16"/></svg>
+          <span>Strategy Bots</span>
+          <span class="counter-pill">3 Active</span>
+        </a>
+        <a href="#breakers" class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+          <span>Circuit Breakers</span>
+          <span class="badge success-badge">Online</span>
+        </a>
+        <a href="#trades" class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          <span>Execution Ledger</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="account-card">
+          <div class="account-status">
+            <span class="status-dot pulse"></span>
+            <span class="status-label" id="accountModeLabel">Alpaca Paper Connected</span>
+          </div>
+          <div class="account-meta">
+            <span class="account-number" id="accountNumberDisplay">Account: PKFP****</span>
+            <span class="badge-env">Sandbox $100k</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-wrapper">
+      <!-- Top Header Bar -->
+      <header class="top-header">
+        <div class="header-left">
+          <button class="mobile-menu-btn" id="sidebarToggleBtn" aria-label="Toggle Menu">
+            <span></span><span></span><span></span>
+          </button>
+          <div class="current-ticker-banner">
+            <span class="symbol-tag" id="currentSymbolTag">SOL/USDT</span>
+            <span class="market-badge" id="marketStatusBadge">🟢 24/7 MARKET</span>
+          </div>
+        </div>
+
+        <div class="header-right">
+          <div class="feed-latency-indicator" id="latencyIndicator">
+            <span class="latency-dot"></span>
+            <span class="latency-text">Lag: <strong id="latencyValue">84ms</strong></span>
+          </div>
+          <div class="clock-display" id="clockDisplay">12:00:00 UTC</div>
+          <button class="quick-action-btn" id="refreshFeedBtn" title="Sync Market Feeds">⟳ Sync</button>
+        </div>
+      </header>
+
+      <!-- Dashboard View -->
+      <main class="dashboard-content">
+        <!-- Top Portfolio Metrics Ribbon -->
+        <section class="metrics-ribbon">
+          <div class="metric-card">
+            <div class="metric-label">Total Portfolio Equity</div>
+            <div class="metric-value font-mono" id="portfolioValueDisplay">$100,000.00</div>
+            <div class="metric-sub positive font-mono">
+              <span>+0.00% (Today)</span>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-label">Available Cash</div>
+            <div class="metric-value font-mono" id="cashBalanceDisplay">$100,000.00</div>
+            <div class="metric-sub text-muted font-mono">
+              <span>Buying Power: <strong id="buyingPowerDisplay">$400,000.00</strong></span>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-label">Daily Realized P&L</div>
+            <div class="metric-value font-mono positive" id="realizedPnlDisplay">+$0.00</div>
+            <div class="metric-sub positive font-mono">
+              <span>Win Rate: <strong>100%</strong></span>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-label">Desk Risk Status</div>
+            <div class="metric-value font-mono text-emerald" id="riskStatusDisplay">GATES CLEAR</div>
+            <div class="metric-sub font-mono">
+              <span class="badge success-badge">4/4 Breakers Normal</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Desk Circuit Breakers Banner -->
+        <section class="circuit-breakers-bar">
+          <div class="breaker-pill" id="dailyLossPill">
+            <span class="pill-dot emerald"></span>
+            <span class="pill-name">Daily Loss Cap</span>
+            <span class="pill-val font-mono">$0.00 / $1,000</span>
+          </div>
+          <div class="breaker-pill" id="consecLossPill">
+            <span class="pill-dot emerald"></span>
+            <span class="pill-name">Consecutive Losses</span>
+            <span class="pill-val font-mono">0 / 3 strikes</span>
+          </div>
+          <div class="breaker-pill" id="liquidityPill">
+            <span class="pill-dot emerald"></span>
+            <span class="pill-name">Pool Liquidity</span>
+            <span class="pill-val font-mono" id="liquidityValDisplay">$4.5M Safe</span>
+          </div>
+          <div class="breaker-pill" id="stalenessPill">
+            <span class="pill-dot emerald"></span>
+            <span class="pill-name">Feed Staleness</span>
+            <span class="pill-val font-mono" id="stalenessValDisplay">&lt; 1.2s OK</span>
+          </div>
+        </section>
+
+        <!-- Main Chart & Trading Grid -->
+        <div class="trading-grid">
+          <!-- Chart Column (Left) -->
+          <div class="chart-column">
+            <div class="card chart-card">
+              <div class="chart-header">
+                <div class="chart-title-group">
+                  <div class="active-pair-info">
+                    <h2 class="active-symbol font-mono" id="chartSymbol">SOL/USDT</h2>
+                    <span class="active-price font-mono" id="chartCurrentPrice">$101.4100</span>
+                    <span class="active-change positive font-mono" id="chartPriceChange">+3.42%</span>
+                  </div>
+                </div>
+
+                <div class="chart-controls">
+                  <div class="timeframe-group">
+                    <button class="tf-btn" data-tf="1m">1m</button>
+                    <button class="tf-btn active" data-tf="5m">5m</button>
+                    <button class="tf-btn" data-tf="15m">15m</button>
+                    <button class="tf-btn" data-tf="1h">1h</button>
+                    <button class="tf-btn" data-tf="1d">1d</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Interactive Candlestick Canvas -->
+              <div class="canvas-container" id="canvasContainer">
+                <canvas id="candlestickCanvas"></canvas>
+                <div class="chart-hud font-mono" id="chartHud">
+                  O: <span id="hudOpen">-</span> H: <span id="hudHigh">-</span> L: <span id="hudLow">-</span> C: <span id="hudClose">-</span> Vol: <span id="hudVolume">-</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Recent Executed Fills Table -->
+            <div class="card trades-card">
+              <div class="card-header">
+                <h3 class="card-title">Live Execution Ledger</h3>
+                <span class="badge info-badge font-mono" id="tradeCountBadge">3 Fills</span>
+              </div>
+              <div class="table-responsive">
+                <table class="trades-table font-mono" id="tradesTable">
+                  <thead>
+                    <tr>
+                      <th>Time</th>
+                      <th>Symbol</th>
+                      <th>Side</th>
+                      <th>Qty</th>
+                      <th>Fill Price</th>
+                      <th>Fee</th>
+                      <th>Bot Gate</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tradesTableBody">
+                    <tr>
+                      <td>22:15:38</td>
+                      <td>SOLUSDT</td>
+                      <td><span class="side-tag buy">BUY</span></td>
+                      <td>2.4640</td>
+                      <td>$101.4607</td>
+                      <td>$0.250</td>
+                      <td>Gambler (Fixed 2%)</td>
+                      <td><span class="badge success-badge">FILLED</span></td>
+                    </tr>
+                    <tr>
+                      <td>22:15:39</td>
+                      <td>BTCUSDT</td>
+                      <td><span class="side-tag buy">BUY</span></td>
+                      <td>0.0031</td>
+                      <td>$80,640.31</td>
+                      <td>$0.250</td>
+                      <td>Gambler (Fixed 2%)</td>
+                      <td><span class="badge success-badge">FILLED</span></td>
+                    </tr>
+                    <tr>
+                      <td>22:15:40</td>
+                      <td>ETHUSDT</td>
+                      <td><span class="side-tag buy">BUY</span></td>
+                      <td>0.1066</td>
+                      <td>$2,344.88</td>
+                      <td>$0.250</td>
+                      <td>Gambler (Fixed 2%)</td>
+                      <td><span class="badge success-badge">FILLED</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Trading Panel Column (Right) -->
+          <div class="panel-column">
+            <!-- Quick Order Placement Card -->
+            <div class="card order-card">
+              <div class="card-header">
+                <h3 class="card-title">Order Execution</h3>
+                <span class="badge success-badge">Circuit Breakers Active</span>
+              </div>
+
+              <div class="order-type-tabs">
+                <button class="order-side-btn buy-btn active" id="buySideBtn">BUY</button>
+                <button class="order-side-btn sell-btn" id="sellSideBtn">SELL</button>
+              </div>
+
+              <form class="order-form" id="orderForm" onsubmit="return false;">
+                <div class="form-group">
+                  <label for="orderSymbol">Asset Symbol</label>
+                  <select id="orderSymbol" class="form-select font-mono">
+                    <option value="SOLUSDT">SOL/USDT (Solana)</option>
+                    <option value="BTCUSDT">BTC/USDT (Bitcoin)</option>
+                    <option value="ETHUSDT">ETH/USDT (Ethereum)</option>
+                    <option value="AAPL">AAPL (Apple Inc.)</option>
+                    <option value="NVDA">NVDA (NVIDIA Corp.)</option>
+                    <option value="SPY">SPY (S&P 500 ETF)</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="orderBotType">Bot Sizing Rule</label>
+                  <select id="orderBotType" class="form-select">
+                    <option value="GAMBLER">Gambler (Strict 2% Book Cap, Honeypot Gate)</option>
+                    <option value="SPY">Spy (Copy Trade, Max +15% Chase Cap)</option>
+                    <option value="HOUSE">House (Fees-Only, 2.0x Clearance)</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <div class="label-row">
+                    <label for="orderAmount">Order Size (USD)</label>
+                    <span class="max-size-hint font-mono" id="maxSizeHint">Max $2,000 (2% Book)</span>
+                  </div>
+                  <div class="input-with-affix">
+                    <span class="affix">$</span>
+                    <input type="number" id="orderAmount" class="form-input font-mono" value="250" min="5" max="100000" step="10">
+                  </div>
+                </div>
+
+                <!-- Live Risk Gate Pre-Flight Checker -->
+                <div class="pre-flight-box" id="preFlightBox">
+                  <div class="pre-flight-header">
+                    <span class="pre-flight-title">Pre-Flight Risk Gate Check</span>
+                    <span class="pre-flight-status positive" id="preFlightStatus">PASSED</span>
+                  </div>
+                  <ul class="pre-flight-checklist" id="preFlightList">
+                    <li class="check-pass">✓ Size $250.00 &lt; $2,000 max book allocation</li>
+                    <li class="check-pass">✓ Market feed latency &lt; 5.00s threshold</li>
+                    <li class="check-pass">✓ Daily loss limit headroom: $1,000 remaining</li>
+                    <li class="check-pass">✓ Honeypot & contract audits verified</li>
+                  </ul>
+                </div>
+
+                <button type="button" class="submit-order-btn buy-action" id="submitOrderBtn">
+                  Execute Paper Buy Order
+                </button>
+              </form>
+            </div>
+
+            <!-- Market Watchlist Card -->
+            <div class="card watchlist-card">
+              <div class="card-header">
+                <h3 class="card-title">Live Watchlist</h3>
+                <span class="badge live-badge font-mono">Real-Time</span>
+              </div>
+              <div class="watchlist-items" id="watchlistItems">
+                <!-- Dynamically populated or rendered -->
+                <div class="watchlist-item active" data-symbol="SOLUSDT">
+                  <div class="wl-info">
+                    <span class="wl-symbol font-mono">SOLUSDT</span>
+                    <span class="wl-name">Solana</span>
+                  </div>
+                  <div class="wl-price-group font-mono">
+                    <span class="wl-price">$101.41</span>
+                    <span class="wl-change positive">+3.42%</span>
+                  </div>
+                </div>
+
+                <div class="watchlist-item" data-symbol="BTCUSDT">
+                  <div class="wl-info">
+                    <span class="wl-symbol font-mono">BTCUSDT</span>
+                    <span class="wl-name">Bitcoin</span>
+                  </div>
+                  <div class="wl-price-group font-mono">
+                    <span class="wl-price">$80,600.01</span>
+                    <span class="wl-change positive">+2.18%</span>
+                  </div>
+                </div>
+
+                <div class="watchlist-item" data-symbol="ETHUSDT">
+                  <div class="wl-info">
+                    <span class="wl-symbol font-mono">ETHUSDT</span>
+                    <span class="wl-name">Ethereum</span>
+                  </div>
+                  <div class="wl-price-group font-mono">
+                    <span class="wl-price">$2,343.71</span>
+                    <span class="wl-change negative">-0.84%</span>
+                  </div>
+                </div>
+
+                <div class="watchlist-item" data-symbol="AAPL">
+                  <div class="wl-info">
+                    <span class="wl-symbol font-mono">AAPL</span>
+                    <span class="wl-name">Apple Inc.</span>
+                  </div>
+                  <div class="wl-price-group font-mono">
+                    <span class="wl-price">$347.73</span>
+                    <span class="wl-change positive">+1.12%</span>
+                  </div>
+                </div>
+
+                <div class="watchlist-item" data-symbol="NVDA">
+                  <div class="wl-info">
+                    <span class="wl-symbol font-mono">NVDA</span>
+                    <span class="wl-name">NVIDIA Corp.</span>
+                  </div>
+                  <div class="wl-price-group font-mono">
+                    <span class="wl-price">$210.96</span>
+                    <span class="wl-change positive">+4.25%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Notification Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="./app.js"></script>
+</body>
+</html>

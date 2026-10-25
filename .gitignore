@@ -1,0 +1,16 @@
+# Secrets & Environment Variables (NEVER COMMIT)
+.env
+.env.*
+*.env
+
+# Dependencies
+node_modules/
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Build Artifacts
+dist/
+build/
+.cache/
