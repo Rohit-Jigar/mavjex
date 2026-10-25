@@ -3,8 +3,13 @@ import type { DeskRiskEngine } from "../desk/DeskRiskEngine.ts";
 
 export interface Position {
   symbol: string;
+  side: OrderSide;
+  leverage: number;
+  marginUsd: number;
+  notionalUsd: number;
   quantity: number;
   averageEntryPrice: number;
+  liquidationPrice: number;
   totalCostUsd: number;
 }
 
@@ -13,9 +18,12 @@ export interface TradeFill {
   orderId: string;
   symbol: string;
   side: OrderSide;
+  leverage: number;
+  marginUsd: number;
   quantity: number;
   requestedPrice: number;
   fillPrice: number;
+  liquidationPrice: number;
   slippagePct: number;
   feeUsd: number;
   totalUsd: number;
@@ -33,10 +41,10 @@ export class PaperBroker {
   private readonly deskEngine: DeskRiskEngine;
 
   constructor(
-    initialCashUsd: number,
+    initialCashUsd = 100_000_000, // $100M USD Virtual Seed Default
     deskEngine: DeskRiskEngine,
-    feeRatePct = 0.1, // 0.1% taker fee
-    slippageBps = 5
+    feeRatePct = 0.05, // 0.05% taker fee
+    slippageBps = 3
   ) {
     this.cashUsd = initialCashUsd;
     this.initialCashUsd = initialCashUsd;
@@ -61,29 +69,59 @@ export class PaperBroker {
     return [...this.fills];
   }
 
+  resetBalance(amountUsd = 100_000_000): void {
+    this.cashUsd = amountUsd;
+    this.positions.clear();
+    this.fills.length = 0;
+    this.deskEngine.resetDailyCounters();
+  }
+
+  static calculateLiquidationPrice(entryPrice: number, side: OrderSide, leverage: number): number {
+    const mmr = 0.005; // 0.5% maintenance margin rate
+    if (leverage <= 1) {
+      return side === "BUY" ? 0 : entryPrice * 2;
+    }
+    if (side === "BUY") {
+      // Long liquidation: Price falls by (1/leverage - mmr)
+      const liqPrice = entryPrice * (1 - (1 / leverage - mmr));
+      return Math.max(0, liqPrice);
+    } else {
+      // Short liquidation: Price rises by (1/leverage - mmr)
+      const liqPrice = entryPrice * (1 + (1 / leverage - mmr));
+      return liqPrice;
+    }
+  }
+
   getPortfolioSummary(currentPrices: Map<string, number>): {
     cashUsd: number;
+    marginUsedUsd: number;
     positionsValueUsd: number;
     totalEquityUsd: number;
     unrealizedPnlUsd: number;
     totalRealizedPnlUsd: number;
   } {
-    let positionsValueUsd = 0;
+    let marginUsedUsd = 0;
     let unrealizedPnlUsd = 0;
 
     for (const pos of this.positions.values()) {
+      marginUsedUsd += pos.marginUsd;
       const currentPrice = currentPrices.get(pos.symbol) || pos.averageEntryPrice;
-      const currentVal = pos.quantity * currentPrice;
-      positionsValueUsd += currentVal;
-      unrealizedPnlUsd += currentVal - pos.totalCostUsd;
+      const priceDelta = currentPrice - pos.averageEntryPrice;
+      const posUnrealized =
+        pos.side === "BUY"
+          ? (priceDelta / pos.averageEntryPrice) * pos.notionalUsd
+          : (-priceDelta / pos.averageEntryPrice) * pos.notionalUsd;
+
+      unrealizedPnlUsd += posUnrealized;
     }
 
-    const totalEquityUsd = this.cashUsd + positionsValueUsd;
+    const totalEquityUsd = this.cashUsd + marginUsedUsd + unrealizedPnlUsd;
     const totalRealizedPnlUsd = totalEquityUsd - this.initialCashUsd - unrealizedPnlUsd;
 
     return {
       cashUsd: this.cashUsd,
-      positionsValueUsd,
+      marginUsedUsd,
+      positionsValueUsd: marginUsedUsd + unrealizedPnlUsd,
       totalEquityUsd,
       unrealizedPnlUsd,
       totalRealizedPnlUsd
@@ -91,9 +129,13 @@ export class PaperBroker {
   }
 
   /**
-   * Executes an order in paper mode with realistic slippage and fees.
+   * Executes an order in paper mode with leverage, margin reservations, slippage, and fee deductions.
    */
-  executeOrder(order: BaseOrderRequest): TradeFill {
+  executeOrder(order: BaseOrderRequest & { leverage?: number }): TradeFill {
+    const leverage = Math.max(1, Math.min(100, order.leverage || 1));
+    const notionalUsd = order.requestedAmountUsd;
+    const requiredMarginUsd = notionalUsd / leverage;
+
     const slippageMultiplier =
       order.side === "BUY"
         ? 1 + this.slippageBps / 10_000
@@ -101,58 +143,80 @@ export class PaperBroker {
 
     const fillPrice = order.quotePrice * slippageMultiplier;
     const slippagePct = ((fillPrice - order.quotePrice) / order.quotePrice) * 100;
-    const quantity = order.requestedAmountUsd / fillPrice;
-    const notionalUsd = quantity * fillPrice;
+    const quantity = notionalUsd / fillPrice;
     const feeUsd = notionalUsd * (this.feeRatePct / 100);
 
-    let realizedPnlUsd: number | undefined;
+    const existing = this.positions.get(order.symbol);
+    if (existing && existing.side !== order.side) {
+      // Opposite side order closes existing position
+      const priceDelta = fillPrice - existing.averageEntryPrice;
+      const realizedPnlUsd =
+        existing.side === "BUY"
+          ? (priceDelta / existing.averageEntryPrice) * existing.notionalUsd
+          : (-priceDelta / existing.averageEntryPrice) * existing.notionalUsd;
 
-    if (order.side === "BUY") {
-      const totalCost = notionalUsd + feeUsd;
-      if (totalCost > this.cashUsd) {
-        throw new Error(
-          `Insufficient paper funds: required $${totalCost.toFixed(2)}, available cash $${this.cashUsd.toFixed(2)}`
-        );
-      }
-      this.cashUsd -= totalCost;
-
-      const existing = this.positions.get(order.symbol);
-      if (existing) {
-        const newQty = existing.quantity + quantity;
-        const newTotalCost = existing.totalCostUsd + notionalUsd;
-        existing.quantity = newQty;
-        existing.totalCostUsd = newTotalCost;
-        existing.averageEntryPrice = newTotalCost / newQty;
-      } else {
-        this.positions.set(order.symbol, {
-          symbol: order.symbol,
-          quantity,
-          averageEntryPrice: fillPrice,
-          totalCostUsd: notionalUsd
-        });
-      }
-    } else {
-      // SELL / EXIT
-      const existing = this.positions.get(order.symbol);
-      if (!existing || existing.quantity <= 0) {
-        throw new Error(`Cannot execute paper SELL: no active position for ${order.symbol}`);
-      }
-
-      const sellQty = Math.min(existing.quantity, quantity);
-      const proceeds = sellQty * fillPrice - feeUsd;
-      const costBasis = (sellQty / existing.quantity) * existing.totalCostUsd;
-      realizedPnlUsd = proceeds - costBasis;
-
-      this.cashUsd += proceeds;
-      existing.quantity -= sellQty;
-      existing.totalCostUsd -= costBasis;
-
-      if (existing.quantity <= 0.000001) {
-        this.positions.delete(order.symbol);
-      }
-
-      // Propagate realized trade PnL back to desk risk engine
+      const returnedCash = existing.marginUsd + realizedPnlUsd - feeUsd;
+      this.cashUsd += returnedCash;
       this.deskEngine.updatePnl(realizedPnlUsd);
+      this.positions.delete(order.symbol);
+
+      const closeFill: TradeFill = {
+        fillId: `close-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+        orderId: order.id,
+        symbol: order.symbol,
+        side: order.side,
+        leverage,
+        marginUsd: existing.marginUsd,
+        quantity: existing.quantity,
+        requestedPrice: order.quotePrice,
+        fillPrice,
+        liquidationPrice: 0,
+        slippagePct,
+        feeUsd,
+        totalUsd: existing.notionalUsd,
+        timestampMs: Date.now(),
+        realizedPnlUsd
+      };
+      this.fills.push(closeFill);
+      return closeFill;
+    }
+
+    // Opening or adding to same-side position
+    const totalDeductionUsd = requiredMarginUsd + feeUsd;
+
+    if (totalDeductionUsd > this.cashUsd) {
+      throw new Error(
+        `Insufficient paper margin: required $${totalDeductionUsd.toFixed(2)} ($${requiredMarginUsd.toFixed(2)} margin + $${feeUsd.toFixed(2)} fee), available cash $${this.cashUsd.toFixed(2)}`
+      );
+    }
+
+    this.cashUsd -= totalDeductionUsd;
+
+    const liquidationPrice = PaperBroker.calculateLiquidationPrice(fillPrice, order.side, leverage);
+
+    if (existing && existing.side === order.side) {
+      // Add to existing same-side position
+      const newNotional = existing.notionalUsd + notionalUsd;
+      const newMargin = existing.marginUsd + requiredMarginUsd;
+      const newQty = existing.quantity + quantity;
+      const newAvgEntry = newNotional / newQty;
+      existing.notionalUsd = newNotional;
+      existing.marginUsd = newMargin;
+      existing.quantity = newQty;
+      existing.averageEntryPrice = newAvgEntry;
+      existing.liquidationPrice = PaperBroker.calculateLiquidationPrice(newAvgEntry, order.side, existing.leverage);
+    } else {
+      this.positions.set(order.symbol, {
+        symbol: order.symbol,
+        side: order.side,
+        leverage,
+        marginUsd: requiredMarginUsd,
+        notionalUsd,
+        quantity,
+        averageEntryPrice: fillPrice,
+        liquidationPrice,
+        totalCostUsd: requiredMarginUsd
+      });
     }
 
     const fill: TradeFill = {
@@ -160,12 +224,58 @@ export class PaperBroker {
       orderId: order.id,
       symbol: order.symbol,
       side: order.side,
+      leverage,
+      marginUsd: requiredMarginUsd,
       quantity,
       requestedPrice: order.quotePrice,
       fillPrice,
+      liquidationPrice,
       slippagePct,
       feeUsd,
       totalUsd: notionalUsd,
+      timestampMs: Date.now()
+    };
+
+    this.fills.push(fill);
+    return fill;
+  }
+
+  /**
+   * Closes an active position at current market price.
+   */
+  closePosition(symbol: string, currentPrice: number): TradeFill {
+    const pos = this.positions.get(symbol);
+    if (!pos) {
+      throw new Error(`Cannot close position: no active position found for ${symbol}`);
+    }
+
+    const priceDelta = currentPrice - pos.averageEntryPrice;
+    const realizedPnlUsd =
+      pos.side === "BUY"
+        ? (priceDelta / pos.averageEntryPrice) * pos.notionalUsd
+        : (-priceDelta / pos.averageEntryPrice) * pos.notionalUsd;
+
+    const returnedCash = pos.marginUsd + realizedPnlUsd;
+    this.cashUsd += Math.max(0, returnedCash);
+
+    this.deskEngine.updatePnl(realizedPnlUsd);
+    this.positions.delete(symbol);
+
+    const closeSide: OrderSide = pos.side === "BUY" ? "SELL" : "BUY";
+    const fill: TradeFill = {
+      fillId: `close-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+      orderId: `close-${pos.symbol}`,
+      symbol: pos.symbol,
+      side: closeSide,
+      leverage: pos.leverage,
+      marginUsd: pos.marginUsd,
+      quantity: pos.quantity,
+      requestedPrice: currentPrice,
+      fillPrice: currentPrice,
+      liquidationPrice: 0,
+      slippagePct: 0,
+      feeUsd: 0,
+      totalUsd: pos.notionalUsd,
       timestampMs: Date.now(),
       realizedPnlUsd
     };

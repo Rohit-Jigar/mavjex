@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="client/public/logo.svg" alt="MavJex Logo" width="120" height="120" />
+<img src="client/logo.svg" alt="MavJex Logo" width="120" height="120" />
 
 # MavJex
 ### **Simulate. Analyze. Evolve.**
@@ -10,9 +10,9 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-10B981.svg)](LICENSE)
 [![Node.js Version](https://img.shields.io/badge/Node.js-22%2B-3B82F6.svg?logo=node.js)](https://nodejs.org/)
 
-**A high-performance algorithmic paper-trading terminal with desk-level circuit breakers, live streaming market ticks, and bot failure-mode execution gates.**
+**A beginner-friendly, production-grade dual trading platform featuring $100,000,000 USD virtual seed capital for risk-free learning, 1x to 100x leverage, dynamic liquidation calculations, Level-2 market depth, desk-level circuit breakers, and live Alpaca execution.**
 
-[Live Frontend Demo](https://rohit-jigar.github.io/mavjex/) • [API Backend on Render](https://mavjex-api.onrender.com)
+[🌐 Live Terminal (GitHub Pages)](https://rohit-jigar.github.io/mavjex/) • [⚡ Render API Backend](https://mavjex-api.onrender.com)
 
 </div>
 
@@ -27,9 +27,9 @@ When sharing your deployed MavJex link on **Twitter / X, LinkedIn, Discord, Tele
 │  [Preview Image: MavJex Fintech Brand Identity Board]           │
 │                                                                 │
 │  MavJex — Simulate. Analyze. Evolve.                            │
-│  Next-Gen Algorithmic Paper-Trading Terminal with Real-Time     │
-│  Market Ticks, Desk-Level Circuit Breakers, and Strict Order-   │
-│  Path Risk Gates.                                               │
+│  Next-Gen Dual Trading Terminal: Practice with $100M Virtual    │
+│  Seed or Trade Live with Alpaca. 1x-100x Leverage, Dynamic      │
+│  Liquidation Calculator & Desk Circuit Breakers.                │
 │  rohit-jigar.github.io/mavjex                                  │
 └─────────────────────────────────────────────────────────────────┘
 ```
@@ -40,73 +40,98 @@ When sharing your deployed MavJex link on **Twitter / X, LinkedIn, Discord, Tele
 
 ```mermaid
 flowchart TD
-    subgraph MarketFeeds ["Live Market Data Layer"]
+    subgraph MarketFeeds ["Live Market Data Feeds"]
         CryptoPipe["Binance Public WebSocket (SOL, BTC, ETH)"]
-        StockPipe["Yahoo Finance / Alpaca Quote Pipe (AAPL, NVDA, SPY)"]
+        StockPipe["Yahoo Finance / Alpaca Quote Pipe (AAPL, NVDA, SPY, TSLA, MSFT)"]
     end
 
-    subgraph ClientLayer ["Frontend (GitHub Pages)"]
-        UI["MavJex Trading Dashboard (Dark Navy #0B1120 / Emerald #10B981)"]
+    subgraph DualTerminal ["MavJex Client (GitHub Pages)"]
+        TerminalUI["MavJex Terminal (Dark Navy #0B1120 / Emerald #10B981)"]
         CanvasChart["Interactive 60fps Candlestick Canvas"]
-        PreFlight["Pre-Flight Risk Validation Widget"]
+        LevSlider["Interactive 1x - 100x Leverage Slider & Chips"]
+        LiqCalc["Dynamic Liquidation Price & Margin Calculator"]
+        DepthLadder["Level-2 Order Book (Market Depth Visualizer)"]
+        PositionsTable["Active Leveraged Positions & 1-Click Close"]
+        AcademyModal["Beginner Academy Educational Modal"]
     end
 
     subgraph DeskLayer ["Desk-Level Risk Engine (Render API)"]
-        DailyLoss["Daily Loss Cap Breaker ($1,000 max)"]
+        DailyLoss["Daily Loss Cap Breaker ($1,000,000 Cap)"]
         ConsecLoss["Consecutive-Loss Breaker (3 strikes)"]
         Liquidity["Pool Liquidity Drop Breaker (&gt; 35% plunge)"]
         FeedLag["Feed-Staleness Breaker (&gt; 5.0s lag)"]
     end
 
-    subgraph BotGates ["Bot Execution Gates"]
-        Gambler["Gambler: Fixed 2% Book Cap & Honeypot Filter"]
+    subgraph BotGates ["Bot Sizing & Strategy Gates"]
+        Gambler["Gambler: Fixed 2% Book Cap & Contract Gates"]
         Spy["Spy: Max +15% Chase Gate & Latency Logging"]
         House["House: Fees-Only Supply Gate & 2.0x Clearance"]
     end
 
     subgraph ExecutionLayer ["Broker Execution Gateway"]
-        AlpacaLive["Alpaca Live Paper Broker ($100k Sandbox)"]
-        InternalPaper["Internal Virtual Cash Simulator"]
+        AlpacaLive["Alpaca Live Broker ($100k Sandbox or Real)"]
+        InternalPaper["Paper Broker ($100,000,000 Virtual Seed Capital)"]
     end
 
-    MarketFeeds --> ClientLayer
+    MarketFeeds --> DualTerminal
     MarketFeeds --> DeskLayer
-    ClientLayer -->|Order Request| BotGates
+    DualTerminal -->|Order Request| BotGates
     BotGates --> DeskLayer
-    DeskLayer -->|All Gates Passed| ExecutionLayer
-    DeskLayer -->|Breaker Tripped| UI
+    DeskLayer -->|Passed Risk Gates| ExecutionLayer
+    DeskLayer -->|Breaker Tripped| TerminalUI
 ```
 
 ---
 
-## ⚡ Key Features
+## ⚡ Key Highlights & Beginner-Friendly Capabilities
 
-1. **Brand Identity**: Custom **M + J + Upward Growth Arrow** monogram logo in an Emerald Green (`#10B981`) and Electric Blue (`#3B82F6`) gradient over Midnight Navy (`#0B1120`).
-2. **Interactive Candlestick Engine**: Custom HTML5 Canvas renderer plotting real-time candlestick wicks, bodies, dynamic volume bars, and responsive crosshair HUDs.
-3. **Desk-Level Circuit Breakers**:
-   * **Daily Loss Cap**: Halts desk operations when aggregate loss reaches threshold.
-   * **Consecutive-Loss Breaker**: Enforces a cooling-down halt after 3 consecutive losses.
-   * **Liquidity-Drop Breaker**: Blocks entries when pool liquidity plunges.
-   * **Feed-Lag Breaker**: Automatically rejects stale data (e.g. weekend closed equity markets).
-4. **Alpaca Broker Integration**: Verified paper-trading client connecting to live market accounts with real-time portfolio balance, buying power, and position tracking.
-5. **Universal Responsiveness**: Engineered for desktop multi-monitor terminals, iPads/tablets, and notched smartphones (iOS & Android).
+### 🎓 1. $100,000,000 USD Virtual Seed Capital
+Beginners start with **$100,000,000 USD** in dummy seed capital. It functions exactly like real money on real-time market data across cryptocurrencies (SOL, BTC, ETH) and US stocks (AAPL, NVDA, SPY, TSLA, MSFT), completely removing the fear of losing real savings while learning.
+
+### ⚡ 2. Interactive Leverage (1x to 100x)
+* **1x (Spot)**: Full cash backing, impossible to liquidate above $0.
+* **2x to 10x (Standard)**: Day-trading leverage with moderate risk.
+* **20x to 50x (Aggressive)**: High volatility and narrow margin buffers.
+* **100x (Maximum)**: 100x capital efficiency for advanced simulation.
+
+### 🛡️ 3. Dynamic Liquidation Price & Margin Calculator
+Before placing any order, the real-time ticket dynamically displays:
+* **Required Margin**: Collateral required (`Notional / Leverage`).
+* **Estimated Liquidation Price**:
+  * **Long**: $\text{Entry Price} \times \left(1 - \frac{1}{\text{Leverage}} + \text{MMR}\right)$
+  * **Short**: $\text{Entry Price} \times \left(1 + \frac{1}{\text{Leverage}} - \text{MMR}\right)$
+  *(where Maintenance Margin Rate $\text{MMR} = 0.5\%$)*
+* **Distance to Liquidation**: Exact percentage drop/rise before margin is consumed.
+* **Contextual Risk Gauge**: Visual alert indicators (Green Safe, Yellow Moderate, Orange High, Red Extreme).
+
+### 📊 4. Level-2 Order Book / Market Depth Ladder
+Inspired by Binance and Zerodha Kite, learners can see real-time buyer and seller bid/ask queues with proportional visual depth bars and live spread metrics.
+
+### 📑 5. Active Positions Table & 1-Click Close
+View open leveraged trades with live Mark Price, Liquidation Price, Margin, and floating Unrealized P&L ($ and %). Close any position instantly in 1 click to lock in profits or cap losses.
+
+### 🔄 6. 1-Click Reset to $100M
+Learners can reset their virtual balance back to $100,000,000 USD anytime with a single click to experiment with fresh strategies.
+
+### 📖 7. Built-in Beginner Academy & Contextual Tooltips
+Interactive tooltips (`ⓘ`) explain Leverage, Margin, Liquidation, Stop Loss, Long vs Short, and Desk Risk Breakers in plain English.
 
 ---
 
 ## 🚀 Quick Start (Local Development)
 
 ### Prerequisites
-* Node.js 22.0.0 or higher.
-* Git.
+* **Node.js 22.0.0+**
+* **Git**
 
-### 1. Run the Backend API Server
+### 1. Run the Backend Service
 ```bash
 node --experimental-strip-types mavjex/server/src/index.ts
 ```
-The server will start at `http://localhost:3001` with live Binance & Yahoo Finance pipes and Alpaca integration.
+The server will start at `http://localhost:3001` with live market feeds and the $100M paper engine.
 
 ### 2. Run the Frontend Dashboard
-Open `mavjex/client/index.html` in any modern web browser or serve it locally:
+Open `mavjex/client/index.html` in your browser or run:
 ```bash
 npx serve mavjex/client
 ```
@@ -115,33 +140,29 @@ npx serve mavjex/client
 
 ## 🌐 Production Deployment Guide
 
-### A. Deploy Backend to Render (1-Click Blueprint)
-
-1. Fork or push this repository to your GitHub account.
-2. Sign in to [Render](https://render.com).
-3. Click **New +** > **Blueprint**.
-4. Select your repository. Render will automatically detect [`render.yaml`](render.yaml) and configure:
-   * **Service Name**: `mavjex-api`
+### A. Deploy Backend to Render (Blueprint)
+1. Sign in to [Render](https://render.com).
+2. Click **New +** > **Blueprint**.
+3. Select this repository. Render detects [`render.yaml`](render.yaml) automatically:
+   * **Service**: `mavjex-api`
    * **Runtime**: Node.js 22+
    * **Start Command**: `node --experimental-strip-types mavjex/server/src/index.ts`
-5. In the Render Dashboard under **Environment Variables**, add:
-   * `ALPACA_API_KEY`: Your Alpaca Paper API Key.
-   * `ALPACA_SECRET_KEY`: Your Alpaca Paper Secret Key.
-6. Click **Apply**. Your backend is live!
+4. Add environment variables:
+   * `ALPACA_API_KEY`: Your Alpaca Key.
+   * `ALPACA_SECRET_KEY`: Your Alpaca Secret.
+5. Click **Apply**.
 
 ### B. Deploy Frontend to GitHub Pages
-
-1. In your GitHub repository, navigate to **Settings** > **Pages**.
+1. Go to repository **Settings** > **Pages**.
 2. Under **Build and deployment** > **Source**, choose **GitHub Actions**.
-3. Push to the `main` branch. The included workflow [`.github/workflows/deploy-frontend.yml`](.github/workflows/deploy-frontend.yml) will build and deploy the dashboard automatically!
-4. Your site will be live at:
+3. Push to `main`. The workflow [`.github/workflows/deploy-frontend.yml`](.github/workflows/deploy-frontend.yml) deploys the frontend automatically to:
    `https://rohit-jigar.github.io/mavjex/`
 
 ---
 
 ## 🧪 Automated Test Suite
 
-Every circuit breaker and hard rule has automated unit tests that fail the build if any breaker stops firing:
+Run the 19 automated tests validating the desk risk engine, bot rules, and leverage mechanics:
 
 ```bash
 node --experimental-strip-types --test "trading-desk-risk/test/*.test.ts"
@@ -149,34 +170,31 @@ node --experimental-strip-types --test "trading-desk-risk/test/*.test.ts"
 
 Output:
 ```
-✔ Desk Breaker: Daily Loss Cap halts entries when breached (2.19ms)
-✔ Desk Breaker: Consecutive Loss Breaker halts entries when streak hits threshold (0.40ms)
-✔ Desk Breaker: Liquidity-Drop Breaker halts on low floor or sudden drain (0.42ms)
-✔ Desk Breaker: Feed-Lag Breaker stops entries when data is more than N seconds stale (0.36ms)
-✔ Gambler Hard Rule: Fixed % size strictly enforced (stops Martingale / sizing up) (2.40ms)
-✔ Gambler Hard Rule: Contract Gates reject honeypots, mintable tokens, and paused trading (0.61ms)
-✔ House Hard Rule 1: Never hold or sell own supply (Fees only, zero rug risk) (2.47ms)
-✔ House Hard Rule 2: Break-even gate requires fee revenue >= 2x launch costs (0.49ms)
-✔ House Hard Rule 3: Daily launch budget hard stop halts further launches (0.39ms)
-✔ Live Execution Gateway: executes in PAPER mode with virtual cash & updates desk PnL (3.03ms)
-✔ Live Execution Gateway: fails-closed if ALPACA_LIVE mode selected without verified credentials (1.33ms)
-✔ Spy Hard Rule: copy skipped when leader is too far ahead (3.42ms)
-✔ Spy Hard Rule: copy allowed when quote is within max chase limit (0.34ms)
-✔ Spy Hard Rule: mirror exits immediately and block buys into leader exit (0.32ms)
-✔ Spy Hard Rule: demote wallet after three losing copies in a row (1.24ms)
-✔ Spy Hard Rule: cap allocation per wallet (0.42ms)
+✔ Desk Breaker: Daily Loss Cap halts entries when breached
+✔ Desk Breaker: Consecutive Loss Breaker halts entries when streak hits threshold
+✔ Desk Breaker: Liquidity-Drop Breaker halts on low floor or sudden drain
+✔ Desk Breaker: Feed-Lag Breaker stops entries when data is more than N seconds stale
+✔ Gambler Hard Rule: Fixed % size strictly enforced (stops Martingale / sizing up)
+✔ Gambler Hard Rule: Contract Gates reject honeypots, mintable tokens, and paused trading
+✔ House Hard Rule 1: Never hold or sell own supply (Fees only, zero rug risk)
+✔ House Hard Rule 2: Break-even gate requires fee revenue >= 2x launch costs
+✔ House Hard Rule 3: Daily launch budget hard stop halts further launches
+✔ PaperBroker: initializes with $100,000,000 virtual seed capital default
+✔ PaperBroker: calculates liquidation price correctly across leverage tiers (1x to 100x)
+✔ PaperBroker: executes leveraged order requiring only fractional margin from $100M cash
+✔ Live Execution Gateway: executes in PAPER mode with virtual cash & updates desk PnL
+✔ Live Execution Gateway: fails-closed if ALPACA_LIVE mode selected without verified credentials
+✔ Spy Hard Rule: copy skipped when leader is too far ahead
+✔ Spy Hard Rule: copy allowed when quote is within max chase limit
+✔ Spy Hard Rule: mirror exits immediately and block buys into leader exit
+✔ Spy Hard Rule: demote wallet after three losing copies in a row
+✔ Spy Hard Rule: cap allocation per wallet
+ℹ tests 19
+ℹ pass 19
+ℹ fail 0
 ```
 
 ---
 
-## 🔒 Security & Safe Trading
-
-* **Zero-Custody Principle**: The bot never requires withdrawal permissions.
-* **Fail-Closed Architecture**: Live execution is blocked unless authorized API keys are provided.
-* **Environment Integrity**: `.env` is permanently excluded via `.gitignore` to prevent secret leaks.
-
----
-
 ## 📄 License
-
-MIT License. Designed and engineered for **MavJex**.
+Released under the [MIT License](LICENSE).

@@ -4,16 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>MavJex — Simulate. Analyze. Evolve.</title>
-  <meta name="description" content="MavJex is a high-performance algorithmic paper-trading terminal with desk-level circuit breakers, live market feeds, and bot failure-mode execution gates.">
-  <meta name="keywords" content="trading, paper trading, algorithmic trading, crypto, stocks, risk management, circuit breakers, fintech">
+  <meta name="description" content="MavJex is a beginner-friendly fintech paper and live trading platform with $100M USD virtual seed capital, interactive leverage (1x-100x), dynamic liquidation calculator, and desk-level circuit breakers.">
+  <meta name="keywords" content="trading, paper trading, beginner trading, leverage, liquidation, risk management, crypto, stocks, circuit breakers, fintech, MavJex">
   <meta name="author" content="MavJex">
   <meta name="theme-color" content="#0B1120">
 
-  <!-- OpenGraph / Social Sharing Meta Tags (WhatsApp, Telegram, Twitter, LinkedIn, Discord) -->
+  <!-- OpenGraph / Social Sharing Meta Tags -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://rohit-jigar.github.io/mavjex/">
   <meta property="og:title" content="MavJex — Simulate. Analyze. Evolve.">
-  <meta property="og:description" content="Next-Gen Algorithmic Paper-Trading Terminal with Real-Time Market Ticks, Desk-Level Circuit Breakers, and Strict Order-Path Risk Gates.">
+  <meta property="og:description" content="Next-Gen Dual Trading Terminal: Practice with $100M Virtual Seed or Trade Live with Alpaca. Includes 1x-100x Leverage, Liquidation Calculator & Desk Circuit Breakers.">
   <meta property="og:image" content="./og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -22,7 +22,7 @@
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="MavJex — Simulate. Analyze. Evolve.">
-  <meta name="twitter:description" content="Next-Gen Algorithmic Paper-Trading Terminal with Real-Time Market Ticks and Desk-Level Circuit Breakers.">
+  <meta name="twitter:description" content="Master trading with $100M virtual seed capital, interactive leverage, and real-time risk gates.">
   <meta name="twitter:image" content="./og-image.png">
 
   <!-- Favicon & PWA -->
@@ -55,12 +55,17 @@
       <nav class="sidebar-nav">
         <a href="#dashboard" class="nav-item active">
           <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
-          <span>Terminal</span>
+          <span>Trading Terminal</span>
         </a>
-        <a href="#watchlist" class="nav-item">
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
-          <span>Watchlist</span>
-          <span class="badge live-badge">Live</span>
+        <a href="#positions" class="nav-item" id="navPositionsLink">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          <span>Positions</span>
+          <span class="badge info-badge font-mono" id="navPositionsBadge">0 Open</span>
+        </a>
+        <a href="#depth" class="nav-item" id="navDepthLink">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 16h4"/><path d="M7 11h8"/><path d="M7 6h12"/></svg>
+          <span>Market Depth</span>
+          <span class="badge live-badge">L2</span>
         </a>
         <a href="#bots" class="nav-item">
           <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8" y2="16"/><line x1="16" y1="16" x2="16" y2="16"/></svg>
@@ -69,24 +74,26 @@
         </a>
         <a href="#breakers" class="nav-item">
           <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
-          <span>Circuit Breakers</span>
-          <span class="badge success-badge">Online</span>
+          <span>Risk Breakers</span>
+          <span class="badge success-badge">Normal</span>
         </a>
-        <a href="#trades" class="nav-item">
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-          <span>Execution Ledger</span>
+        <a href="#academy" class="nav-item" id="navAcademyBtn">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          <span>Beginner Academy</span>
+          <span class="badge new-badge">Help</span>
         </a>
       </nav>
 
+      <!-- Sidebar Account Status Footer -->
       <div class="sidebar-footer">
-        <div class="account-card">
+        <div class="account-card" id="accountStatusCard">
           <div class="account-status">
-            <span class="status-dot pulse"></span>
-            <span class="status-label" id="accountModeLabel">Alpaca Paper Connected</span>
+            <span class="status-dot pulse" id="accountStatusDot"></span>
+            <span class="status-label" id="accountModeLabel">Paper: $100M Seed</span>
           </div>
           <div class="account-meta">
-            <span class="account-number" id="accountNumberDisplay">Account: PKFP****</span>
-            <span class="badge-env">Sandbox $100k</span>
+            <span class="account-number" id="accountNumberDisplay">Demo Wallet #MVX-100M</span>
+            <button class="reset-wallet-btn" id="sidebarResetBtn" title="Reset Wallet to $100M">🔄 Reset</button>
           </div>
         </div>
       </div>
@@ -100,87 +107,138 @@
           <button class="mobile-menu-btn" id="sidebarToggleBtn" aria-label="Toggle Menu">
             <span></span><span></span><span></span>
           </button>
+
+          <!-- Current Symbol Tag -->
           <div class="current-ticker-banner">
             <span class="symbol-tag" id="currentSymbolTag">SOL/USDT</span>
             <span class="market-badge" id="marketStatusBadge">🟢 24/7 MARKET</span>
           </div>
+
+          <!-- Dual Mode Switcher -->
+          <div class="mode-toggle-group" role="tablist">
+            <button class="mode-btn active" id="modePaperBtn" data-mode="PAPER">
+              <span class="mode-icon">🎓</span>
+              <span class="mode-text">Paper ($100M Demo)</span>
+            </button>
+            <button class="mode-btn" id="modeLiveBtn" data-mode="ALPACA">
+              <span class="mode-icon">⚡</span>
+              <span class="mode-text">Live (Alpaca)</span>
+            </button>
+          </div>
         </div>
 
         <div class="header-right">
+          <!-- Beginner Academy Button -->
+          <button class="academy-btn" id="headerAcademyBtn">
+            <span>📖</span> Beginner Guide
+          </button>
+
+          <!-- 1-Click Reset Balance -->
+          <button class="reset-btn" id="headerResetBtn" title="Reset Virtual Wallet to $100,000,000">
+            <span>🔄</span> Reset $100M
+          </button>
+
+          <!-- Latency Indicator -->
           <div class="feed-latency-indicator" id="latencyIndicator">
             <span class="latency-dot"></span>
-            <span class="latency-text">Lag: <strong id="latencyValue">84ms</strong></span>
+            <span class="latency-text">Lag: <strong id="latencyValue">42ms</strong></span>
           </div>
+
           <div class="clock-display" id="clockDisplay">12:00:00 UTC</div>
-          <button class="quick-action-btn" id="refreshFeedBtn" title="Sync Market Feeds">⟳ Sync</button>
         </div>
       </header>
 
       <!-- Dashboard View -->
       <main class="dashboard-content">
+        <!-- Beginner Welcome Banner (Dismissible) -->
+        <section class="beginner-banner" id="beginnerBanner">
+          <div class="banner-content">
+            <div class="banner-badge">🎓 BEGINNER MODE ACTIVE</div>
+            <h3>Welcome to MavJex! You have <strong>$100,000,000</strong> in virtual seed capital to learn trading.</h3>
+            <p>Practice trading real crypto and US stocks with 1x to 100x leverage risk-free. Watch dynamic liquidation prices and test hedge-fund grade circuit breakers before putting real money on the line.</p>
+          </div>
+          <div class="banner-actions">
+            <button class="banner-guide-btn" id="bannerGuideBtn">Learn How Leverage Works</button>
+            <button class="banner-dismiss-btn" id="bannerDismissBtn" title="Dismiss">✕</button>
+          </div>
+        </section>
+
         <!-- Top Portfolio Metrics Ribbon -->
         <section class="metrics-ribbon">
           <div class="metric-card">
-            <div class="metric-label">Total Portfolio Equity</div>
-            <div class="metric-value font-mono" id="portfolioValueDisplay">$100,000.00</div>
-            <div class="metric-sub positive font-mono">
-              <span>+0.00% (Today)</span>
+            <div class="metric-header-row">
+              <span class="metric-label">Total Portfolio Equity</span>
+              <span class="tooltip-trigger" data-tip="Total current net worth including available cash and unrealized profit/loss on open positions.">ⓘ</span>
+            </div>
+            <div class="metric-value font-mono" id="portfolioValueDisplay">$100,000,000.00</div>
+            <div class="metric-sub positive font-mono" id="portfolioSubChange">
+              <span>Seed Capital: $100,000,000.00</span>
             </div>
           </div>
 
           <div class="metric-card">
-            <div class="metric-label">Available Cash</div>
-            <div class="metric-value font-mono" id="cashBalanceDisplay">$100,000.00</div>
+            <div class="metric-header-row">
+              <span class="metric-label">Virtual Cash Available</span>
+              <span class="tooltip-trigger" data-tip="Unallocated cash balance ready to place new trades or margin reservations.">ⓘ</span>
+            </div>
+            <div class="metric-value font-mono text-emerald" id="cashBalanceDisplay">$100,000,000.00</div>
             <div class="metric-sub text-muted font-mono">
-              <span>Buying Power: <strong id="buyingPowerDisplay">$400,000.00</strong></span>
+              <span>Buying Power (100x): <strong id="buyingPowerDisplay">$10,000,000,000</strong></span>
             </div>
           </div>
 
           <div class="metric-card">
-            <div class="metric-label">Daily Realized P&L</div>
-            <div class="metric-value font-mono positive" id="realizedPnlDisplay">+$0.00</div>
-            <div class="metric-sub positive font-mono">
-              <span>Win Rate: <strong>100%</strong></span>
+            <div class="metric-header-row">
+              <span class="metric-label">Margin Used & Open P&L</span>
+              <span class="tooltip-trigger" data-tip="Total cash locked as collateral across all open leveraged positions, plus live floating P&L.">ⓘ</span>
+            </div>
+            <div class="metric-value font-mono" id="marginUsedDisplay">$0.00</div>
+            <div class="metric-sub positive font-mono" id="unrealizedPnlDisplay">
+              <span>Unrealized: +$0.00 (+0.00%)</span>
             </div>
           </div>
 
           <div class="metric-card">
-            <div class="metric-label">Desk Risk Status</div>
+            <div class="metric-header-row">
+              <span class="metric-label">Desk Risk Status</span>
+              <span class="tooltip-trigger" data-tip="Status of automated circuit breakers: Daily Loss Cap, Max Consecutive Losses, Liquidity Drop, and Feed Staleness.">ⓘ</span>
+            </div>
             <div class="metric-value font-mono text-emerald" id="riskStatusDisplay">GATES CLEAR</div>
             <div class="metric-sub font-mono">
-              <span class="badge success-badge">4/4 Breakers Normal</span>
+              <span class="badge success-badge" id="breakersCountBadge">4/4 Breakers Normal</span>
             </div>
           </div>
         </section>
 
         <!-- Desk Circuit Breakers Banner -->
         <section class="circuit-breakers-bar">
-          <div class="breaker-pill" id="dailyLossPill">
+          <div class="breaker-pill" id="dailyLossPill" title="Daily Loss Cap circuit breaker stops trading if day's losses exceed threshold.">
             <span class="pill-dot emerald"></span>
             <span class="pill-name">Daily Loss Cap</span>
-            <span class="pill-val font-mono">$0.00 / $1,000</span>
+            <span class="pill-val font-mono" id="dailyLossValDisplay">$0.00 / $1,000,000</span>
           </div>
-          <div class="breaker-pill" id="consecLossPill">
+          <div class="breaker-pill" id="consecLossPill" title="Consecutive loss gate stops streak-induced Martingale sizing.">
             <span class="pill-dot emerald"></span>
             <span class="pill-name">Consecutive Losses</span>
-            <span class="pill-val font-mono">0 / 3 strikes</span>
+            <span class="pill-val font-mono" id="consecLossValDisplay">0 / 3 strikes</span>
           </div>
-          <div class="breaker-pill" id="liquidityPill">
+          <div class="breaker-pill" id="liquidityPill" title="Liquidity floor prevents orders in drained or low-volume pools.">
             <span class="pill-dot emerald"></span>
-            <span class="pill-name">Pool Liquidity</span>
+            <span class="pill-name">Market Liquidity</span>
             <span class="pill-val font-mono" id="liquidityValDisplay">$4.5M Safe</span>
           </div>
-          <div class="breaker-pill" id="stalenessPill">
+          <div class="breaker-pill" id="stalenessPill" title="Feed staleness breaker blocks execution if quote is delayed >5s.">
             <span class="pill-dot emerald"></span>
             <span class="pill-name">Feed Staleness</span>
-            <span class="pill-val font-mono" id="stalenessValDisplay">&lt; 1.2s OK</span>
+            <span class="pill-val font-mono" id="stalenessValDisplay">&lt; 1.0s Fresh</span>
           </div>
         </section>
 
         <!-- Main Chart & Trading Grid -->
         <div class="trading-grid">
-          <!-- Chart Column (Left) -->
+          <!-- Left Column: Chart & Tabs (Positions / Depth / Trades) -->
           <div class="chart-column">
+            <!-- Chart Card -->
             <div class="card chart-card">
               <div class="chart-header">
                 <div class="chart-title-group">
@@ -211,190 +269,352 @@
               </div>
             </div>
 
-            <!-- Recent Executed Fills Table -->
-            <div class="card trades-card">
-              <div class="card-header">
-                <h3 class="card-title">Live Execution Ledger</h3>
-                <span class="badge info-badge font-mono" id="tradeCountBadge">3 Fills</span>
+            <!-- Tabbed Section: Active Positions, Level-2 Depth, & Execution Ledger -->
+            <div class="card data-tabs-card">
+              <div class="tabs-header">
+                <div class="tabs-buttons">
+                  <button class="tab-btn active" data-tab="tabPositions" id="tabPositionsBtn">
+                    Active Positions <span class="tab-badge" id="positionsTabCount">0</span>
+                  </button>
+                  <button class="tab-btn" data-tab="tabDepth" id="tabDepthBtn">
+                    Level-2 Order Book <span class="tab-badge live-badge">Live</span>
+                  </button>
+                  <button class="tab-btn" data-tab="tabTrades" id="tabTradesBtn">
+                    Execution Ledger <span class="tab-badge" id="tradesTabCount">0</span>
+                  </button>
+                </div>
               </div>
-              <div class="table-responsive">
-                <table class="trades-table font-mono" id="tradesTable">
-                  <thead>
-                    <tr>
-                      <th>Time</th>
-                      <th>Symbol</th>
-                      <th>Side</th>
-                      <th>Qty</th>
-                      <th>Fill Price</th>
-                      <th>Fee</th>
-                      <th>Bot Gate</th>
-                      <th>Status</th>
-                    </tr>
-                  </thead>
-                  <tbody id="tradesTableBody">
-                    <tr>
-                      <td>22:15:38</td>
-                      <td>SOLUSDT</td>
-                      <td><span class="side-tag buy">BUY</span></td>
-                      <td>2.4640</td>
-                      <td>$101.4607</td>
-                      <td>$0.250</td>
-                      <td>Gambler (Fixed 2%)</td>
-                      <td><span class="badge success-badge">FILLED</span></td>
-                    </tr>
-                    <tr>
-                      <td>22:15:39</td>
-                      <td>BTCUSDT</td>
-                      <td><span class="side-tag buy">BUY</span></td>
-                      <td>0.0031</td>
-                      <td>$80,640.31</td>
-                      <td>$0.250</td>
-                      <td>Gambler (Fixed 2%)</td>
-                      <td><span class="badge success-badge">FILLED</span></td>
-                    </tr>
-                    <tr>
-                      <td>22:15:40</td>
-                      <td>ETHUSDT</td>
-                      <td><span class="side-tag buy">BUY</span></td>
-                      <td>0.1066</td>
-                      <td>$2,344.88</td>
-                      <td>$0.250</td>
-                      <td>Gambler (Fixed 2%)</td>
-                      <td><span class="badge success-badge">FILLED</span></td>
-                    </tr>
-                  </tbody>
-                </table>
+
+              <!-- Tab 1: Active Leveraged Positions Table -->
+              <div class="tab-pane active" id="tabPositions">
+                <div class="table-responsive">
+                  <table class="data-table font-mono" id="positionsTable">
+                    <thead>
+                      <tr>
+                        <th>Symbol</th>
+                        <th>Side</th>
+                        <th>Leverage</th>
+                        <th>Entry Price</th>
+                        <th>Mark Price</th>
+                        <th>Liq. Price</th>
+                        <th>Margin</th>
+                        <th>Unrealized P&L</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody id="positionsTableBody">
+                      <tr class="empty-row">
+                        <td colspan="9">
+                          <div class="empty-state">
+                            <span class="empty-icon">📊</span>
+                            <div class="empty-title">No Open Positions</div>
+                            <div class="empty-desc">Choose an asset and open your first leveraged paper trade on the right!</div>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Tab 2: Level-2 Order Book / Market Depth Ladder -->
+              <div class="tab-pane" id="tabDepth">
+                <div class="depth-container">
+                  <div class="depth-header-row">
+                    <span class="depth-col-head">Price ($)</span>
+                    <span class="depth-col-head">Size</span>
+                    <span class="depth-col-head">Total</span>
+                  </div>
+
+                  <!-- Asks (Sells) -->
+                  <div class="depth-ladder asks" id="depthAsksLadder">
+                    <!-- Populated dynamically -->
+                  </div>
+
+                  <!-- Spread Banner -->
+                  <div class="depth-spread-bar" id="depthSpreadBar">
+                    <div class="spread-indicator">
+                      <span class="spread-label">Spread:</span>
+                      <span class="spread-val font-mono" id="depthSpreadVal">$0.0400 (0.04%)</span>
+                    </div>
+                    <div class="last-price font-mono" id="depthLastPrice">$101.4100</div>
+                  </div>
+
+                  <!-- Bids (Buys) -->
+                  <div class="depth-ladder bids" id="depthBidsLadder">
+                    <!-- Populated dynamically -->
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tab 3: Execution Ledger -->
+              <div class="tab-pane" id="tabTrades">
+                <div class="table-responsive">
+                  <table class="data-table font-mono" id="tradesTable">
+                    <thead>
+                      <tr>
+                        <th>Time</th>
+                        <th>Symbol</th>
+                        <th>Side</th>
+                        <th>Lev</th>
+                        <th>Qty</th>
+                        <th>Fill Price</th>
+                        <th>Fee</th>
+                        <th>Gate / Bot</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tradesTableBody">
+                      <!-- Trades inserted dynamically -->
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </div>
 
-          <!-- Trading Panel Column (Right) -->
+          <!-- Right Column: Order Execution Ticket & Watchlist -->
           <div class="panel-column">
-            <!-- Quick Order Placement Card -->
+            <!-- Order Execution Card -->
             <div class="card order-card">
               <div class="card-header">
-                <h3 class="card-title">Order Execution</h3>
-                <span class="badge success-badge">Circuit Breakers Active</span>
+                <div class="card-title-group">
+                  <h3 class="card-title">Order Execution</h3>
+                  <span class="mode-indicator-pill" id="orderModeIndicator">Paper ($100M)</span>
+                </div>
+                <span class="badge success-badge">Risk Gates Active</span>
               </div>
 
+              <!-- BUY / SELL Tab Buttons -->
               <div class="order-type-tabs">
-                <button class="order-side-btn buy-btn active" id="buySideBtn">BUY</button>
-                <button class="order-side-btn sell-btn" id="sellSideBtn">SELL</button>
+                <button class="order-side-btn buy-btn active" id="buySideBtn">BUY (LONG)</button>
+                <button class="order-side-btn sell-btn" id="sellSideBtn">SELL (SHORT)</button>
               </div>
 
               <form class="order-form" id="orderForm" onsubmit="return false;">
+                <!-- Symbol Selector -->
                 <div class="form-group">
-                  <label for="orderSymbol">Asset Symbol</label>
+                  <label for="orderSymbol" class="form-label">
+                    <span>Target Asset</span>
+                    <span class="label-hint" id="symbolTypeHint">Crypto 24/7</span>
+                  </label>
                   <select id="orderSymbol" class="form-select font-mono">
-                    <option value="SOLUSDT">SOL/USDT (Solana)</option>
-                    <option value="BTCUSDT">BTC/USDT (Bitcoin)</option>
-                    <option value="ETHUSDT">ETH/USDT (Ethereum)</option>
-                    <option value="AAPL">AAPL (Apple Inc.)</option>
-                    <option value="NVDA">NVDA (NVIDIA Corp.)</option>
-                    <option value="SPY">SPY (S&P 500 ETF)</option>
+                    <optgroup label="⚡ Crypto (24/7 Live)">
+                      <option value="SOLUSDT" selected>SOL/USDT — Solana</option>
+                      <option value="BTCUSDT">BTC/USDT — Bitcoin</option>
+                      <option value="ETHUSDT">ETH/USDT — Ethereum</option>
+                    </optgroup>
+                    <optgroup label="📈 US Equities (Stocks & ETFs)">
+                      <option value="AAPL">AAPL — Apple Inc.</option>
+                      <option value="NVDA">NVDA — NVIDIA Corp.</option>
+                      <option value="SPY">SPY — S&P 500 ETF</option>
+                      <option value="TSLA">TSLA — Tesla Inc.</option>
+                      <option value="MSFT">MSFT — Microsoft</option>
+                    </optgroup>
                   </select>
                 </div>
 
-                <div class="form-group">
-                  <label for="orderBotType">Bot Sizing Rule</label>
-                  <select id="orderBotType" class="form-select">
-                    <option value="GAMBLER">Gambler (Strict 2% Book Cap, Honeypot Gate)</option>
-                    <option value="SPY">Spy (Copy Trade, Max +15% Chase Cap)</option>
-                    <option value="HOUSE">House (Fees-Only, 2.0x Clearance)</option>
-                  </select>
-                </div>
-
+                <!-- Interactive Leverage Slider & Quick Chips -->
                 <div class="form-group">
                   <div class="label-row">
-                    <label for="orderAmount">Order Size (USD)</label>
-                    <span class="max-size-hint font-mono" id="maxSizeHint">Max $2,000 (2% Book)</span>
+                    <label for="leverageSlider" class="form-label">
+                      <span>Leverage Multiplier</span>
+                      <span class="tooltip-trigger" data-tip="Leverage multiplies your buying power. At 10x, $1,000 margin controls $10,000 notional. Higher leverage increases profit potential but moves your liquidation price closer!">ⓘ</span>
+                    </label>
+                    <span class="leverage-badge font-mono" id="leverageValueBadge">10x</span>
                   </div>
-                  <div class="input-with-affix">
-                    <span class="affix">$</span>
-                    <input type="number" id="orderAmount" class="form-input font-mono" value="250" min="5" max="100000" step="10">
+
+                  <!-- Quick Leverage Chips -->
+                  <div class="leverage-chips-group">
+                    <button type="button" class="lev-chip" data-lev="1">1x (Spot)</button>
+                    <button type="button" class="lev-chip" data-lev="2">2x</button>
+                    <button type="button" class="lev-chip" data-lev="5">5x</button>
+                    <button type="button" class="lev-chip active" data-lev="10">10x</button>
+                    <button type="button" class="lev-chip" data-lev="20">20x</button>
+                    <button type="button" class="lev-chip" data-lev="50">50x</button>
+                    <button type="button" class="lev-chip high-risk" data-lev="100">100x</button>
+                  </div>
+
+                  <input type="range" id="leverageSlider" class="leverage-range" min="1" max="100" value="10" step="1">
+
+                  <div class="leverage-risk-notice" id="leverageRiskNotice">
+                    <span class="risk-meter-icon">🟡</span>
+                    <span class="risk-meter-text">Moderate Risk: 10% move against you will liquidate the position.</span>
                   </div>
                 </div>
 
-                <!-- Live Risk Gate Pre-Flight Checker -->
+                <!-- Order Notional Size & Quick Allocation Chips -->
+                <div class="form-group">
+                  <div class="label-row">
+                    <label for="orderAmount" class="form-label">
+                      <span>Position Size (Notional USD)</span>
+                      <span class="tooltip-trigger" data-tip="Total trade value you control in the market. Your actual required margin is Notional / Leverage.">ⓘ</span>
+                    </label>
+                    <span class="max-size-hint font-mono" id="maxSizeHint">Available: $100M</span>
+                  </div>
+
+                  <div class="input-with-affix">
+                    <span class="affix">$</span>
+                    <input type="number" id="orderAmount" class="form-input font-mono" value="10000" min="10" max="100000000" step="100">
+                  </div>
+
+                  <!-- Quick Percentage Allocation Buttons -->
+                  <div class="quick-alloc-group">
+                    <button type="button" class="alloc-chip" data-alloc="1000">$1k</button>
+                    <button type="button" class="alloc-chip" data-alloc="10000">$10k</button>
+                    <button type="button" class="alloc-chip" data-alloc="100000">$100k</button>
+                    <button type="button" class="alloc-chip" data-alloc="1000000">$1M</button>
+                    <button type="button" class="alloc-chip" data-alloc="5000000">$5M</button>
+                  </div>
+                </div>
+
+                <!-- Dynamic Liquidation Price & Margin Calculator Box -->
+                <div class="calc-box">
+                  <div class="calc-row">
+                    <span class="calc-label">Required Margin (Collateral):</span>
+                    <span class="calc-val font-mono" id="calcRequiredMargin">$1,000.00</span>
+                  </div>
+                  <div class="calc-row">
+                    <span class="calc-label">Est. Liquidation Price:</span>
+                    <span class="calc-val font-mono text-crimson" id="calcLiquidationPrice">$91.78</span>
+                  </div>
+                  <div class="calc-row">
+                    <span class="calc-label">Liquidation Distance:</span>
+                    <span class="calc-val font-mono" id="calcDistanceToLiq">-9.50%</span>
+                  </div>
+                  <div class="calc-row">
+                    <span class="calc-label">Est. Trading Fee (0.05%):</span>
+                    <span class="calc-val font-mono" id="calcTradingFee">$5.00</span>
+                  </div>
+                </div>
+
+                <!-- Strategy Sizing Gate Selector -->
+                <div class="form-group">
+                  <label for="orderBotType" class="form-label">Risk Policy & Bot Gate</label>
+                  <select id="orderBotType" class="form-select">
+                    <option value="GAMBLER" selected>Gambler Rule (Strict Book Cap & Contract Gates)</option>
+                    <option value="SPY">Spy Rule (Copy Trading, Max +15% Chase Cap)</option>
+                    <option value="HOUSE">House Rule (Fees Only, 2.0x Safety Clearance)</option>
+                  </select>
+                </div>
+
+                <!-- Pre-Flight Risk Checklist -->
                 <div class="pre-flight-box" id="preFlightBox">
                   <div class="pre-flight-header">
                     <span class="pre-flight-title">Pre-Flight Risk Gate Check</span>
                     <span class="pre-flight-status positive" id="preFlightStatus">PASSED</span>
                   </div>
                   <ul class="pre-flight-checklist" id="preFlightList">
-                    <li class="check-pass">✓ Size $250.00 &lt; $2,000 max book allocation</li>
+                    <li class="check-pass">✓ Required margin within available cash</li>
                     <li class="check-pass">✓ Market feed latency &lt; 5.00s threshold</li>
-                    <li class="check-pass">✓ Daily loss limit headroom: $1,000 remaining</li>
-                    <li class="check-pass">✓ Honeypot & contract audits verified</li>
+                    <li class="check-pass">✓ Daily loss limit headroom safe</li>
+                    <li class="check-pass">✓ Contract audit & honeypot verification passed</li>
                   </ul>
                 </div>
 
+                <!-- Submit Button -->
                 <button type="button" class="submit-order-btn buy-action" id="submitOrderBtn">
-                  Execute Paper Buy Order
+                  Execute Paper Buy Order ($10,000 @ 10x)
                 </button>
               </form>
             </div>
 
-            <!-- Market Watchlist Card -->
+            <!-- Live Market Watchlist Card -->
             <div class="card watchlist-card">
               <div class="card-header">
                 <h3 class="card-title">Live Watchlist</h3>
                 <span class="badge live-badge font-mono">Real-Time</span>
+              </div>
+              <div class="watchlist-filter">
+                <input type="text" id="watchlistSearch" placeholder="🔍 Search asset symbol or name..." class="search-input">
               </div>
               <div class="watchlist-items" id="watchlistItems">
                 <!-- Dynamically populated or rendered -->
                 <div class="watchlist-item active" data-symbol="SOLUSDT">
                   <div class="wl-info">
                     <span class="wl-symbol font-mono">SOLUSDT</span>
-                    <span class="wl-name">Solana</span>
+                    <span class="wl-name">Solana (24/7)</span>
                   </div>
                   <div class="wl-price-group font-mono">
-                    <span class="wl-price">$101.41</span>
-                    <span class="wl-change positive">+3.42%</span>
+                    <span class="wl-price" id="wlPrice-SOLUSDT">$101.41</span>
+                    <span class="wl-change positive" id="wlChange-SOLUSDT">+3.42%</span>
                   </div>
                 </div>
 
                 <div class="watchlist-item" data-symbol="BTCUSDT">
                   <div class="wl-info">
                     <span class="wl-symbol font-mono">BTCUSDT</span>
-                    <span class="wl-name">Bitcoin</span>
+                    <span class="wl-name">Bitcoin (24/7)</span>
                   </div>
                   <div class="wl-price-group font-mono">
-                    <span class="wl-price">$80,600.01</span>
-                    <span class="wl-change positive">+2.18%</span>
+                    <span class="wl-price" id="wlPrice-BTCUSDT">$80,600.01</span>
+                    <span class="wl-change positive" id="wlChange-BTCUSDT">+2.18%</span>
                   </div>
                 </div>
 
                 <div class="watchlist-item" data-symbol="ETHUSDT">
                   <div class="wl-info">
                     <span class="wl-symbol font-mono">ETHUSDT</span>
-                    <span class="wl-name">Ethereum</span>
+                    <span class="wl-name">Ethereum (24/7)</span>
                   </div>
                   <div class="wl-price-group font-mono">
-                    <span class="wl-price">$2,343.71</span>
-                    <span class="wl-change negative">-0.84%</span>
+                    <span class="wl-price" id="wlPrice-ETHUSDT">$2,343.71</span>
+                    <span class="wl-change negative" id="wlChange-ETHUSDT">-0.84%</span>
                   </div>
                 </div>
 
                 <div class="watchlist-item" data-symbol="AAPL">
                   <div class="wl-info">
                     <span class="wl-symbol font-mono">AAPL</span>
-                    <span class="wl-name">Apple Inc.</span>
+                    <span class="wl-name">Apple Inc. (Stock)</span>
                   </div>
                   <div class="wl-price-group font-mono">
-                    <span class="wl-price">$347.73</span>
-                    <span class="wl-change positive">+1.12%</span>
+                    <span class="wl-price" id="wlPrice-AAPL">$347.73</span>
+                    <span class="wl-change positive" id="wlChange-AAPL">+1.12%</span>
                   </div>
                 </div>
 
                 <div class="watchlist-item" data-symbol="NVDA">
                   <div class="wl-info">
                     <span class="wl-symbol font-mono">NVDA</span>
-                    <span class="wl-name">NVIDIA Corp.</span>
+                    <span class="wl-name">NVIDIA Corp. (Stock)</span>
                   </div>
                   <div class="wl-price-group font-mono">
-                    <span class="wl-price">$210.96</span>
-                    <span class="wl-change positive">+4.25%</span>
+                    <span class="wl-price" id="wlPrice-NVDA">$210.96</span>
+                    <span class="wl-change positive" id="wlChange-NVDA">+4.25%</span>
+                  </div>
+                </div>
+
+                <div class="watchlist-item" data-symbol="SPY">
+                  <div class="wl-info">
+                    <span class="wl-symbol font-mono">SPY</span>
+                    <span class="wl-name">S&P 500 ETF</span>
+                  </div>
+                  <div class="wl-price-group font-mono">
+                    <span class="wl-price" id="wlPrice-SPY">$582.10</span>
+                    <span class="wl-change positive" id="wlChange-SPY">+0.75%</span>
+                  </div>
+                </div>
+
+                <div class="watchlist-item" data-symbol="TSLA">
+                  <div class="wl-info">
+                    <span class="wl-symbol font-mono">TSLA</span>
+                    <span class="wl-name">Tesla Inc.</span>
+                  </div>
+                  <div class="wl-price-group font-mono">
+                    <span class="wl-price" id="wlPrice-TSLA">$218.40</span>
+                    <span class="wl-change positive" id="wlChange-TSLA">+2.30%</span>
+                  </div>
+                </div>
+
+                <div class="watchlist-item" data-symbol="MSFT">
+                  <div class="wl-info">
+                    <span class="wl-symbol font-mono">MSFT</span>
+                    <span class="wl-name">Microsoft Corp.</span>
+                  </div>
+                  <div class="wl-price-group font-mono">
+                    <span class="wl-price" id="wlPrice-MSFT">$428.50</span>
+                    <span class="wl-change negative" id="wlChange-MSFT">-0.45%</span>
                   </div>
                 </div>
               </div>
@@ -402,6 +622,73 @@
           </div>
         </div>
       </main>
+    </div>
+  </div>
+
+  <!-- Beginner Academy Modal -->
+  <div class="modal-backdrop" id="academyModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="modal-badge">BEGINNER ACADEMY</span>
+          <h2>Mastering Trading with MavJex</h2>
+        </div>
+        <button class="modal-close-btn" id="academyModalClose">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="academy-section">
+          <h3>💰 1. What is the $100,000,000 Virtual Seed Capital?</h3>
+          <p>MavJex gives every learner a <strong>$100,000,000 USD dummy balance</strong>. It works with real live quotes from top exchanges so you can test market strategies, trade sizing, and risk rules without risking a single dollar of real money.</p>
+        </div>
+
+        <div class="academy-section">
+          <h3>⚡ 2. How Does Leverage Work (1x to 100x)?</h3>
+          <p>Leverage lets you control a larger position with less upfront capital:</p>
+          <ul>
+            <li><strong>1x (Spot)</strong>: $1,000 buys $1,000 of asset. Liquidation is impossible unless price drops to $0.</li>
+            <li><strong>10x Leverage</strong>: $1,000 margin controls <strong>$10,000</strong> worth of asset. A +5% market move gives you +50% profit!</li>
+            <li><strong>100x Leverage</strong>: $1,000 controls <strong>$100,000</strong>. Extremely high reward, but a tiny 1% move against you will liquidate the position.</li>
+          </ul>
+        </div>
+
+        <div class="academy-section">
+          <h3>🛡️ 3. What is Liquidation Price & Margin?</h3>
+          <p><strong>Margin</strong> is your locked collateral. <strong>Liquidation Price</strong> is the exact price level where your loss equals your margin. MavJex automatically calculates your liquidation price before you execute any trade so you always know your exact risk boundaries.</p>
+        </div>
+
+        <div class="academy-section">
+          <h3>📈 4. Long (BUY) vs Short (SELL)</h3>
+          <ul>
+            <li><strong>BUY / LONG</strong>: You profit when the asset price goes UP.</li>
+            <li><strong>SELL / SHORT</strong>: You profit when the asset price goes DOWN.</li>
+          </ul>
+        </div>
+
+        <div class="academy-section">
+          <h3>🛑 5. Desk-Level Circuit Breakers</h3>
+          <p>MavJex incorporates institutional hedge-fund risk controls: <strong>Daily Loss Cap</strong> stops trading when daily drawdown reaches the limit; <strong>Consecutive Loss Gate</strong> halts streak-induced Martingale betting; and <strong>Feed Staleness Gate</strong> blocks trades if latency exceeds 5 seconds.</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-primary" id="academyModalGotIt">I'm Ready to Trade!</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reset Balance Confirmation Modal -->
+  <div class="modal-backdrop" id="resetModal">
+    <div class="modal-card small-modal">
+      <div class="modal-header">
+        <h2>Reset Virtual Wallet?</h2>
+        <button class="modal-close-btn" id="resetModalClose">✕</button>
+      </div>
+      <div class="modal-body">
+        <p>This will reset your paper trading balance back to <strong>$100,000,000.00 USD</strong>, close all active positions, and clear daily risk counters. You can start fresh anytime!</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" id="resetModalCancel">Cancel</button>
+        <button class="btn-danger" id="resetModalConfirm">Reset to $100M</button>
+      </div>
     </div>
   </div>
 
